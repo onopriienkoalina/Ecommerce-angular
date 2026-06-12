@@ -1,0 +1,14 @@
+.products {
+  padding: 0 28px;
+}
+.products__title {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+.products__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+} 

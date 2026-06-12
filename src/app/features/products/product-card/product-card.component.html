@@ -1,0 +1,20 @@
+<div class="product__card">
+  @if (product().discount) {
+    <p class="product__discount">{{ product().discount }}</p>
+  }
+  <img class="product__image" [src]="product().imageUrl" alt="{{ product().title }}" />
+  <div class="product__content">
+    <div class="product-__text-contant">
+      <h2 class="product__name">{{ product().title }}</h2>
+      <p class="product__price">${{ product().price }}
+      @if (product().oldPrice) {
+        <span class="product__old-price">${{ product().oldPrice }}</span>
+      }
+      </p>
+      <img class="product__rating" [src]="product().rating" alt="rating">
+    </div>
+    <div class="product__button-container">
+      <button class="product__button"><img src="/cart.svg" alt="" class="product__button-img"></button>
+    </div>
+  </div>
+</div>
