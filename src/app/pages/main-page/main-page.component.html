@@ -1,8 +1,4 @@
 <section class="products">
   <h1 class="products__title">Featured Products</h1>
-    <div class="products__list">
-      @for (product of products(); track product.id) {
-        <app-product-card [product]="product" />
-      }
-    </div>
+    <app-product-list [products]="products()" />
 </section>

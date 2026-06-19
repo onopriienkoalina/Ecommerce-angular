@@ -1,20 +1,26 @@
-<div class="product__card">
-  @if (product().discount) {
-    <p class="product__discount">{{ product().discount }}</p>
+<div class="product__card"
+[class.product__card--main]="product().isMain"
+  [class.product-card--discount-70]="product().discountPercent === 70"
+  [class.product-card--discount-60]="product().discountPercent === 60"
+  [class.product-card--discount-50]="product().discountPercent === 50"
+  >
+  @if (product().discountPercent) {
+    <p class="product__discount">{{ product().discountPercent }}%</p>
   }
   <img class="product__image" [src]="product().imageUrl" alt="{{ product().title }}" />
   <div class="product__content">
-    <div class="product-__text-contant">
+    <div class="product__text-contant">
       <h2 class="product__name">{{ product().title }}</h2>
-      <p class="product__price">${{ product().price }}
+      <p class="product__description">{{ product().description | truncate: 35 }}</p>
+      <p class="product__price">{{ product().price | currency: 'EUR' }}
       @if (product().oldPrice) {
-        <span class="product__old-price">${{ product().oldPrice }}</span>
+        <span class="product__old-price">{{ product().oldPrice |currency: 'EUR' }}</span>
       }
       </p>
       <img class="product__rating" [src]="product().rating" alt="rating">
     </div>
     <div class="product__button-container">
-      <button class="product__button"><img src="/cart.svg" alt="" class="product__button-img"></button>
+      <button type="button" class="product__button" [attr.aria-label]="'Add ' + product().title + ' to cart'"></button>
     </div>
   </div>
 </div>
