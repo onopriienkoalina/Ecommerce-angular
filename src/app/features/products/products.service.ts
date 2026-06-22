@@ -11,12 +11,12 @@ export class ProductsService {
 
   getProducts(): Observable<ProductCard[]> {
     return of(this.products).pipe(
-      map(products => products.map((product, index) => 
+      map(productList => productList.map((product, index) => 
         this.mapToProductCard(product, index)
       )),
     );
   }
-  
+
   private mapToProductCard(product: Product, index: number): ProductCard {
     const discountPercent = this.calculateDiscountPercent(product);
 
