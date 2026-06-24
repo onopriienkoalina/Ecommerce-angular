@@ -1,14 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { ProductCardComponent } from '../../features/products/product-card/product-card.component';
-import { products } from '../../features/products/products.data';
-import { Product } from '../../features/products/product';
-
+import { Component, inject} from '@angular/core';
+import { ProductListComponent } from '../../features/products/product-list/product-list.component';
+import { ProductsService } from '../../features/products/products.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-main-page',
-  imports: [ProductCardComponent],
+  imports: [ProductListComponent],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })
 export class MainPageComponent {
-  protected readonly products = signal<Product[]>(products);
+  protected readonly productsService = inject(ProductsService);
+  protected readonly products = toSignal(this.productsService.getProducts(), { initialValue: []});
 }

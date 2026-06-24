@@ -6,9 +6,3 @@
   font-weight: 600;
   margin-bottom: 40px;
 }
-.products__list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 24px;
-} 
