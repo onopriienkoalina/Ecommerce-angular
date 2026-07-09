@@ -4,16 +4,16 @@ import { products } from '../../../assets/products.data';
 import { Observable, of, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsService {
   private readonly products: Product[] = products;
 
   getProducts(): Observable<ProductCard[]> {
     return of(this.products).pipe(
-      map(productList => productList.map((product, index) => 
-        this.mapToProductCard(product, index)
-      )),
+      map((productList) =>
+        productList.map((product, index) => this.mapToProductCard(product, index)),
+      ),
     );
   }
 
@@ -42,5 +42,11 @@ export class ProductsService {
     }
 
     return 50;
+  }
+
+  getProductById(id: number): Observable<ProductCard | undefined> {
+    return this.getProducts().pipe(
+      map((products) => products.find((product) => product.id === id)),
+    );
   }
 }

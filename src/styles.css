@@ -1,3 +1,4 @@
+@import './app/shared/styles/product-shared.css';
 *,
 *::before,
 *::after {
@@ -58,11 +59,11 @@ body {
   display: flex;
   align-items: center;
   padding: 28px;
-  gap: 10px
+  gap: 10px;
 }
-.nav { 
+.nav {
   margin: 0 auto;
 }
 .nav-link {
-margin-right: 27px;
+  margin-right: 27px;
 }

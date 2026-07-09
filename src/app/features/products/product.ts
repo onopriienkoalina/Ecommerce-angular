@@ -6,6 +6,7 @@ export interface Product {
   price: number;
   oldPrice: number;
   imageUrl: string;
+  galleryImages: string[];
   rating: string;
 }
 export interface ProductCard extends Product {
