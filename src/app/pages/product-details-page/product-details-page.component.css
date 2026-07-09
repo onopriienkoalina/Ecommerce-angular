@@ -126,7 +126,7 @@
   transition: 0.2s ease, background-color 0.2s ease;
 }
 .product__details-add-to-cart:hover {
-  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 178, 7, 0.25);
 }
 .product__details-add-to-cart-icon {
   margin-right: 16px;
