@@ -7,4 +7,9 @@ export const routes: Routes = [
   { path: '', component: MainPageComponent },
   { path: 'contacts', component: ContactPageComponent },
   { path: 'products/:id', component: ProductDetailsPageComponent },
+  {
+    path: 'order',
+    loadChildren: () =>
+      import('./features/order/order.module').then((m) => m.OrderModule),
+  },
 ];
