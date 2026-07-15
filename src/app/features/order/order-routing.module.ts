@@ -4,13 +4,13 @@ import { OrderPageComponent } from './pages/order-page/order-page.component';
 
 const routes: Routes = [
   {
-  path: '',
-  component: OrderPageComponent,
+    path: '',
+    component: OrderPageComponent,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class OrderRoutingModule { }
+export class OrderRoutingModule {}

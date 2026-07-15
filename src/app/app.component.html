@@ -2,11 +2,11 @@
   <img src="logo.svg" alt="Logo" class="logo" />
   <nav class="header__nav" aria-label="Main navigation">
     <div class="header__nav-container">
-    <a class="header__nav-link" routerLink="/">Home</a>
-    <a class="header__nav-link" routerLink="/contacts">Contacts</a>
+      <a class="header__nav-link" routerLink="/">Home</a>
+      <a class="header__nav-link" routerLink="/contacts">Contacts</a>
     </div>
     <a class="header__cart" routerLink="/order">
-      <img src="Bag.svg" alt="" class="header__cart-icon">
+      <img src="Bag.svg" alt="" class="header__cart-icon" />
       @if (cartCount() > 0) {
         <span class="header__cart-count">{{ cartCount() }}</span>
       }

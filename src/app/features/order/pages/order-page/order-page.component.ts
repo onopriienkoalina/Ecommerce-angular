@@ -1,9 +1,8 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ProductsService } from '../../../products/products.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
-
+import { CartService } from '../../../cart/cart.service';
 type PaymentMethod = 'card' | 'paypal' | 'cash';
 type DeliveryOption = 'today' | 'tomorrow' | 'custom';
 
@@ -12,16 +11,20 @@ type DeliveryOption = 'today' | 'tomorrow' | 'custom';
   // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
   templateUrl: './order-page.component.html',
-  styleUrl: './order-page.component.css'
+  styleUrl: './order-page.component.css',
 })
 export class OrderPageComponent {
-  private readonly productService = inject(ProductsService);
+  private readonly cartService = inject(CartService);
   protected readonly currentStep = signal(1);
-  protected readonly products = toSignal(this.productService.getProducts(), { initialValue: [] });
+  protected readonly cartItems = this.cartService.items;
+  protected readonly cartTotalQuantity = this.cartService.totalQuantity;
+  protected readonly cartTotalPrice = this.cartService.totalPrice;
 
   protected readonly orderForm = new FormGroup({
     product: new FormGroup({
-      productId: new FormControl<number | null>(null),
+      productId: new FormControl<number | null>(this.cartItems()[0]?.product.id ?? null, {
+        validators: [Validators.required],
+      }),
     }),
 
     address: new FormGroup({
@@ -41,23 +44,23 @@ export class OrderPageComponent {
         nonNullable: true,
       }),
       customDate: new FormControl('', {
-      nonNullable: true,
+        nonNullable: true,
       }),
     }),
   });
 
   protected readonly selectedProductId = toSignal(
     this.orderForm.controls.product.controls.productId.valueChanges.pipe(
-      startWith(this.orderForm.controls.product.controls.productId.value),  
+      startWith(this.orderForm.controls.product.controls.productId.value),
     ),
     {
       initialValue: this.orderForm.controls.product.controls.productId.value,
     },
   );
 
-  protected readonly selectedProduct = computed(() => {
+  protected readonly selectedCartItem = computed(() => {
     const productId = this.selectedProductId();
-    return this.products().find((product) => product.id === productId) ?? null;
+    return this.cartItems().find((item) => item.product.id === productId) ?? null;
   });
 
   protected readonly deliveryOption = toSignal(
@@ -86,17 +89,33 @@ export class OrderPageComponent {
   }
 
   protected submitOrder(): void {
-    if (this.orderForm.invalid || !this.isDeliveryStepValid()) {
+    if (this.cartItems().length === 0 || this.orderForm.invalid || !this.isDeliveryStepValid()) {
       this.orderForm.markAllAsTouched();
       return;
     }
-    console.log(this.orderForm.getRawValue());
+
+    const formValue = this.orderForm.getRawValue();
+
+    const orderData = {
+      items: this.cartItems().map((item) => ({
+        productId: item.product.id,
+        title: item.product.title,
+        quantity: item.quantity,
+        unitPrice: item.product.price,
+      })),
+      address: formValue.address,
+      payment: formValue.payment,
+      delivery: formValue.delivery,
+      totalQuantity: this.cartTotalQuantity(),
+      totalPrice: this.cartTotalPrice(),
+    };
+    console.log('Submitted order:', orderData);
   }
 
   private isCurrentStepValid(): boolean {
     switch (this.currentStep()) {
       case 1:
-        return this.orderForm.controls.product.valid;
+        return this.cartItems().length > 0 && this.orderForm.controls.product.valid;
       case 2:
         return this.orderForm.controls.address.valid;
       case 3:
@@ -117,6 +136,7 @@ export class OrderPageComponent {
 
     return delivery.customDate.trim().length > 0;
   }
+
   private markCurrentStepAsTouched(): void {
     switch (this.currentStep()) {
       case 1:
@@ -135,5 +155,13 @@ export class OrderPageComponent {
         this.orderForm.controls.delivery.markAllAsTouched();
         break;
     }
+  }
+
+  protected increaseCartItem(productId: number, quantity: number): void {
+    this.cartService.updateQuantity(productId, quantity + 1);
+  }
+
+  protected decreaseCartItem(productId: number): void {
+    this.cartService.removeFromCart(productId);
   }
 }

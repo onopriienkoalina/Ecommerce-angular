@@ -1,7 +1,7 @@
-.contact {
-  margin: 0 auto;
-  padding: 80px 28px;
-  max-width: 312px;
+.container__contact {
+  display: flex;
+  gap: 48px;
+  align-items: center;
 }
 .contact__item {
   display: flex;
@@ -9,11 +9,72 @@
   justify-content: center;
   align-items: center;
   padding: 24px;
-  border-bottom: 1px solid #e6e6e6;
 }
 .contact__icon {
   margin-bottom: 16px;
 }
 .contact__text {
   text-align: center;
+}
+.contact {
+  width: min(100% - 32px, 700px);
+  margin: 0 auto;
+  padding: 48px 0;
+}
+
+.contact__title {
+  margin-bottom: 32px;
+  font-size: 36px;
+  text-align: center;
+}
+
+.contact__form {
+  display: grid;
+  gap: 20px;
+}
+
+.contact__field {
+  display: grid;
+  gap: 8px;
+}
+
+.contact__field label {
+  font-weight: 500;
+}
+
+.contact__field input,
+.contact__field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  font: inherit;
+  outline: none;
+}
+
+.contact__field input:focus,
+.contact__field textarea:focus {
+  border-color: #00b207;
+  box-shadow: 0 0 0 3px rgb(0 178 7 / 12%);
+}
+
+.contact__error {
+  margin: 0;
+  color: #ea4b48;
+  font-size: 13px;
+}
+
+.contact__submit {
+  justify-self: start;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 999px;
+  background-color: #00b207;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contact__submit:hover {
+  background-color: #009b06;
 }

@@ -12,9 +12,7 @@ export interface CartItem {
 export class CartService {
   private readonly storageKey = 'cartItems';
 
-  private readonly cartItems = signal<CartItem[]>(
-    this.loadCartItems(),
-  );
+  private readonly cartItems = signal<CartItem[]>(this.loadCartItems());
 
   readonly items = this.cartItems.asReadonly();
 
@@ -22,12 +20,13 @@ export class CartService {
     this.cartItems().reduce((total, item) => total + item.quantity, 0),
   );
 
-  constructor () {
+  readonly totalPrice = computed(() =>
+    this.cartItems().reduce((total, item) => total + item.product.price * item.quantity, 0),
+  );
+
+  constructor() {
     effect(() => {
-      localStorage.setItem(
-        this.storageKey,
-        JSON.stringify(this.cartItems()),
-      );
+      localStorage.setItem(this.storageKey, JSON.stringify(this.cartItems()));
     });
   }
 
@@ -46,7 +45,7 @@ export class CartService {
       );
     });
   }
-  
+
   private loadCartItems(): CartItem[] {
     const savedCart = localStorage.getItem(this.storageKey);
 
@@ -85,6 +84,25 @@ export class CartService {
       typeof productData['id'] === 'number' &&
       typeof item['quantity'] === 'number' &&
       item['quantity'] > 0
-    );  
+    );
+  }
+
+  updateQuantity(productId: number, quantity: number): void {
+    const safeQuantity = Math.max(1, Math.floor(quantity));
+
+    this.cartItems.update((items) =>
+      items.map((item) =>
+        item.product.id === productId
+          ? {
+              ...item,
+              quantity: safeQuantity,
+            }
+          : item,
+      ),
+    );
+  }
+
+  removeFromCart(prductId: number): void {
+    this.cartItems.update((items) => items.filter((item) => item.product.id !== prductId));
   }
 }

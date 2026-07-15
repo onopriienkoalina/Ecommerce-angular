@@ -1,6 +1,6 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { ProductsService } from '../../features/products/products.service';
 import { CurrencyPipe } from '@angular/common';
@@ -8,7 +8,7 @@ import { CartService } from '../../features/cart/cart.service';
 
 @Component({
   selector: 'app-product-details-page',
-  imports: [RouterLink, CurrencyPipe],
+  imports: [CurrencyPipe],
   templateUrl: './product-details-page.component.html',
   styleUrl: './product-details-page.component.css',
 })
