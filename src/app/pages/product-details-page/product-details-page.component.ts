@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs';
+import { distinctUntilChanged, map, switchMap, tap } from 'rxjs';
 import { ProductsService } from '../../features/products/products.service';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../features/cart/cart.service';
@@ -19,7 +19,14 @@ export class ProductDetailsPageComponent {
   protected readonly quantity = signal<number>(1);
   private readonly cartService = inject(CartService);
 
-  private readonly productId = this.route.paramMap.pipe(map((params) => Number(params.get('id'))));
+  private readonly productId = this.route.paramMap.pipe(
+    map((params) => Number(params.get('id'))),
+    distinctUntilChanged(),
+    tap(() => {
+      this.selectedImage.set(null);
+      this.quantity.set(1);
+    }),
+  );
 
   protected readonly product = toSignal(
     this.productId.pipe(switchMap((id) => this.productsService.getProductById(id))),
@@ -29,7 +36,16 @@ export class ProductDetailsPageComponent {
   protected readonly currentImage = computed(() => {
     const product = this.product();
 
-    return this.selectedImage() ?? product?.galleryImages[0] ?? product?.imageUrl ?? '';
+    if (!product) {
+      return '';
+    }
+    const selectedImage = this.selectedImage();
+
+    if (selectedImage && product.galleryImages.includes(selectedImage)) {
+      return selectedImage;
+    }
+
+    return product.galleryImages[0] ?? product.imageUrl ?? '';
   });
 
   protected selectImage(imageUrl: string): void {
