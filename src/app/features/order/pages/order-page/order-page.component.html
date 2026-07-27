@@ -1,0 +1,438 @@
+<section class="order">
+  <header class="order__header">
+    <p class="order__eyebrow">Checkout</p>
+    <h1 class="order__title">Create your order</h1>
+    <p class="order__subtitle">Complete all five steps to submit your order.</p>
+  </header>
+
+  <ol class="order__steps" aria-label="Order progress">
+    <li
+      class="order__step"
+      [class.order__step--active]="currentStep() === 1"
+      [class.order__step--completed]="currentStep() > 1"
+      [attr.aria-current]="currentStep() === 1 ? 'step' : null"
+    >
+      <span class="order__step-number">1</span>
+      <span class="order__step-label">Product</span>
+    </li>
+
+    <li
+      class="order__step"
+      [class.order__step--active]="currentStep() === 2"
+      [class.order__step--completed]="currentStep() > 2"
+      [attr.aria-current]="currentStep() === 2 ? 'step' : null"
+    >
+      <span class="order__step-number">2</span>
+      <span class="order__step-label">Address</span>
+    </li>
+
+    <li
+      class="order__step"
+      [class.order__step--active]="currentStep() === 3"
+      [class.order__step--completed]="currentStep() > 3"
+      [attr.aria-current]="currentStep() === 3 ? 'step' : null"
+    >
+      <span class="order__step-number">3</span>
+      <span class="order__step-label">Payment</span>
+    </li>
+
+    <li
+      class="order__step"
+      [class.order__step--active]="currentStep() === 4"
+      [class.order__step--completed]="currentStep() > 4"
+      [attr.aria-current]="currentStep() === 4 ? 'step' : null"
+    >
+      <span class="order__step-number">4</span>
+      <span class="order__step-label">Delivery</span>
+    </li>
+
+    <li
+      class="order__step"
+      [class.order__step--active]="currentStep() === 5"
+      [attr.aria-current]="currentStep() === 5 ? 'step' : null"
+    >
+      <span class="order__step-number">5</span>
+      <span class="order__step-label">Summary</span>
+    </li>
+  </ol>
+
+  <form class="order__form" [formGroup]="orderForm" (ngSubmit)="submitOrder()" novalidate>
+    <div class="order__panel">
+      @switch (currentStep()) {
+        @case (1) {
+          <fieldset class="order__fieldset" formGroupName="product">
+            <legend class="order__legend">Products in your cart</legend>
+
+            @if (cartItems().length > 0) {
+              <div class="order__field">
+                <label class="order__label" for="productId">
+                  Product
+                  <span aria-hidden="true">*</span>
+                </label>
+
+                <select id="productId" class="order__control" formControlName="productId">
+                  @for (item of cartItems(); track item.product.id) {
+                    <option [ngValue]="item.product.id">
+                      {{ item.product.title }}
+                      — Quantity: {{ item.quantity }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              @if (selectedCartItem(); as item) {
+                <article class="order__product-preview">
+                  <img
+                    class="order__product-image"
+                    [src]="item.product.imageUrl"
+                    [alt]="item.product.title"
+                  />
+
+                  <div class="order__product-content">
+                    <h2 class="order__product-title">
+                      {{ item.product.title }}
+                    </h2>
+
+                    <p class="order__product-description">
+                      {{ item.product.description }}
+                    </p>
+
+                    <p>Quantity: {{ item.quantity }}</p>
+
+                    <p class="order__product-price">
+                      {{ item.product.price | currency: 'EUR' }}
+                    </p>
+                    <p class="order__product-price">
+                      Subtotal:
+                      {{ item.product.price * item.quantity | currency: 'EUR' }}
+                    </p>
+                  </div>
+                </article>
+              }
+            } @else {
+              <p class="order__error">
+                Your cart is empty. Add a product before creating an order.
+              </p>
+            }
+          </fieldset>
+        }
+
+        @case (2) {
+          <fieldset class="order__fieldset" formGroupName="address">
+            <legend class="order__legend">Delivery address</legend>
+
+            <p class="order__step-description">
+              Enter the address where your order should be delivered.
+            </p>
+
+            <div class="order__fields-grid">
+              <div class="order__field">
+                <label class="order__label" for="country">
+                  Country
+                  <span aria-hidden="true">*</span>
+                </label>
+
+                <input
+                  id="country"
+                  class="order__control"
+                  type="text"
+                  formControlName="country"
+                  autocomplete="country-name"
+                  placeholder="Enter country"
+                />
+
+                @if (
+                  orderForm.controls.address.controls.country.touched &&
+                  orderForm.controls.address.controls.country.invalid
+                ) {
+                  <p class="order__error">Country is required.</p>
+                }
+              </div>
+
+              <div class="order__field">
+                <label class="order__label" for="city">
+                  City
+                  <span aria-hidden="true">*</span>
+                </label>
+
+                <input
+                  id="city"
+                  class="order__control"
+                  type="text"
+                  formControlName="city"
+                  autocomplete="address-level2"
+                  placeholder="Enter city"
+                />
+
+                @if (
+                  orderForm.controls.address.controls.city.touched &&
+                  orderForm.controls.address.controls.city.invalid
+                ) {
+                  <p class="order__error">City is required.</p>
+                }
+              </div>
+
+              <div class="order__field order__field--full">
+                <label class="order__label" for="street">
+                  Address
+                  <span aria-hidden="true">*</span>
+                </label>
+
+                <input
+                  id="street"
+                  class="order__control"
+                  type="text"
+                  formControlName="street"
+                  autocomplete="street-address"
+                  placeholder="Street, building and apartment"
+                />
+
+                @if (
+                  orderForm.controls.address.controls.street.touched &&
+                  orderForm.controls.address.controls.street.invalid
+                ) {
+                  <p class="order__error">Address is required.</p>
+                }
+              </div>
+            </div>
+          </fieldset>
+        }
+
+        @case (3) {
+          <fieldset class="order__fieldset" formGroupName="payment">
+            <legend class="order__legend">Payment method</legend>
+
+            <p class="order__step-description">Choose how you would like to pay for your order.</p>
+
+            <div class="order__options">
+              <label class="order__option">
+                <input class="order__radio" type="radio" formControlName="method" value="card" />
+
+                <span class="order__option-content">
+                  <strong>Card</strong>
+                  <span>Pay securely with a bank card</span>
+                </span>
+              </label>
+
+              <label class="order__option">
+                <input class="order__radio" type="radio" formControlName="method" value="paypal" />
+
+                <span class="order__option-content">
+                  <strong>PayPal</strong>
+                  <span>Use your PayPal account</span>
+                </span>
+              </label>
+
+              <label class="order__option">
+                <input class="order__radio" type="radio" formControlName="method" value="cash" />
+
+                <span class="order__option-content">
+                  <strong>Cash</strong>
+                  <span>Pay when your order is delivered</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+        }
+
+        @case (4) {
+          <fieldset class="order__fieldset" formGroupName="delivery">
+            <legend class="order__legend">Delivery date</legend>
+
+            <p class="order__step-description">Choose when you would like to receive your order.</p>
+
+            <div class="order__options">
+              <label class="order__option">
+                <input class="order__radio" type="radio" formControlName="option" value="today" />
+
+                <span class="order__option-content">
+                  <strong>Today</strong>
+                  <span>Receive your order today</span>
+                </span>
+              </label>
+
+              <label class="order__option">
+                <input
+                  class="order__radio"
+                  type="radio"
+                  formControlName="option"
+                  value="tomorrow"
+                />
+
+                <span class="order__option-content">
+                  <strong>Tomorrow</strong>
+                  <span>Receive your order tomorrow</span>
+                </span>
+              </label>
+
+              <label class="order__option">
+                <input class="order__radio" type="radio" formControlName="option" value="custom" />
+
+                <span class="order__option-content">
+                  <strong>Choose a date</strong>
+                  <span>Select a date from the calendar</span>
+                </span>
+              </label>
+            </div>
+
+            @if (shouldShowCustomDate()) {
+              <div class="order__field order__custom-date">
+                <label class="order__label" for="customDate">
+                  Delivery date
+                  <span aria-hidden="true">*</span>
+                </label>
+
+                <input
+                  id="customDate"
+                  class="order__control"
+                  type="date"
+                  formControlName="customDate"
+                />
+
+                @if (
+                  orderForm.controls.delivery.controls.customDate.touched &&
+                  !orderForm.controls.delivery.controls.customDate.value
+                ) {
+                  <p class="order__error">Please choose a delivery date.</p>
+                }
+              </div>
+            }
+          </fieldset>
+        }
+
+        @case (5) {
+          <section class="order__summary" aria-labelledby="order-summary-title">
+            <h2 id="order-summary-title" class="order__legend">Order summary</h2>
+
+            <p class="order__step-description">
+              Check your information before submitting the order.
+            </p>
+
+            <div class="order__summary-products">
+              <h3>Products</h3>
+
+              @for (item of cartItems(); track item.product.id) {
+                <article class="order__summary-product">
+                  <img
+                    class="order__summary-image"
+                    [src]="item.product.imageUrl"
+                    [alt]="item.product.title"
+                  />
+
+                  <div class="order__summary-product-info">
+                    <strong>{{ item.product.title }}</strong>
+
+                    <p>Quantity: {{ item.quantity }}</p>
+
+                    <p>
+                      Price:
+                      {{ item.product.price | currency: 'EUR' }}
+                    </p>
+
+                    <p>
+                      Subtotal:
+                      {{ item.product.price * item.quantity | currency: 'EUR' }}
+                    </p>
+                  </div>
+                </article>
+              }
+              <div class="order__summary-total">
+                <p>
+                  <strong>Total quantity:</strong>
+                  {{ cartTotalQuantity() }}
+                </p>
+
+                <p>
+                  <strong>Total price:</strong>
+                  {{ cartTotalPrice() | currency: 'EUR' }}
+                </p>
+              </div>
+            </div>
+            <dl class="order__summary-list">
+              <div class="order__summary-row">
+                <dt>Country</dt>
+                <dd>
+                  {{ orderForm.controls.address.controls.country.value }}
+                </dd>
+              </div>
+
+              <div class="order__summary-row">
+                <dt>City</dt>
+                <dd>
+                  {{ orderForm.controls.address.controls.city.value }}
+                </dd>
+              </div>
+
+              <div class="order__summary-row">
+                <dt>Address</dt>
+                <dd>
+                  {{ orderForm.controls.address.controls.street.value }}
+                </dd>
+              </div>
+
+              <div class="order__summary-row">
+                <dt>Payment method</dt>
+
+                <dd>
+                  @switch (orderForm.controls.payment.controls.method.value) {
+                    @case ('card') {
+                      Card
+                    }
+
+                    @case ('paypal') {
+                      PayPal
+                    }
+
+                    @case ('cash') {
+                      Cash
+                    }
+                  }
+                </dd>
+              </div>
+
+              <div class="order__summary-row">
+                <dt>Delivery date</dt>
+
+                <dd>
+                  @switch (orderForm.controls.delivery.controls.option.value) {
+                    @case ('today') {
+                      Today
+                    }
+
+                    @case ('tomorrow') {
+                      Tomorrow
+                    }
+
+                    @case ('custom') {
+                      {{ orderForm.controls.delivery.controls.customDate.value }}
+                    }
+                  }
+                </dd>
+              </div>
+            </dl>
+
+            <button type="submit" class="order__button order__button--submit">Submit order</button>
+          </section>
+        }
+      }
+    </div>
+
+    <div class="order__navigation">
+      @if (currentStep() > 1) {
+        <button
+          type="button"
+          class="order__button order__button--secondary"
+          (click)="goToPreviousStep()"
+        >
+          Back
+        </button>
+      }
+
+      @if (currentStep() < 5) {
+        <button type="button" class="order__button order__button--primary" (click)="goToNextStep()">
+          Next step
+        </button>
+      }
+    </div>
+  </form>
+</section>

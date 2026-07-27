@@ -1,16 +1,106 @@
-<div class="contact">
-  <div class="contact__item">
-    <img src="/Map.svg" alt="Map icon" class="contact__icon" />
-    <p class="contact__text">2715 Ash Dr. San Jose, South Dakota 83475</p>
-  </div>
-  <div class="contact__item">
-    <img src="/Email.svg" alt="Email icon" class="contact__icon" />
-    <a href="mailto:Proxy@gmail.com" class="contact__text">Proxy&#64;gmail.com</a>
-    <a href="mailto:Help.proxy@gmail.com" class="contact__text">Help.proxy&#64;gmail.com</a>
-  </div>
-  <div class="contact__item">
-    <img src="/Phone.svg" alt="Phone icon" class="contact__icon" />
-    <a href="tel:(219) 555-0114" class="contact__text">(219) 555-0114</a>
-    <a href="tel:(164) 333-0487" class="contact__text">(164) 333-0487</a>
-  </div>
+<div class="container__contact">
+  <section class="contact">
+    <div class="contact__item">
+      <img src="/Map.svg" alt="Map icon" class="contact__icon" />
+      <p class="contact__text">2715 Ash Dr. San Jose, South Dakota 83475</p>
+    </div>
+    <div class="contact__item">
+      <img src="/Email.svg" alt="Email icon" class="contact__icon" />
+      <a href="mailto:Proxy@gmail.com" class="contact__text">Proxy&#64;gmail.com</a>
+      <a href="mailto:Help.proxy@gmail.com" class="contact__text">Help.proxy&#64;gmail.com</a>
+    </div>
+    <div class="contact__item">
+      <img src="/Phone.svg" alt="Phone icon" class="contact__icon" />
+      <a href="tel:(219) 555-0114" class="contact__text">(219) 555-0114</a>
+      <a href="tel:(164) 333-0487" class="contact__text">(164) 333-0487</a>
+    </div>
+  </section>
+  <section class="contact">
+    <h1 class="contact__title">Contact Us</h1>
+
+    <form
+      class="contact__form"
+      #contactForm="ngForm"
+      (ngSubmit)="submitContactForm(contactForm)"
+      novalidate
+    >
+      <div class="contact__field">
+        <label for="firstName">First name</label>
+
+        <input
+          id="firstName"
+          type="text"
+          name="firstName"
+          autocomplete="given-name"
+          [(ngModel)]="contactFormModel.firstName"
+          #firstName="ngModel"
+          required
+        />
+
+        @if (firstName.invalid && firstName.touched) {
+          <p class="contact__error">First name is required.</p>
+        }
+      </div>
+
+      <div class="contact__field">
+        <label for="lastName">Last name</label>
+
+        <input
+          id="lastName"
+          type="text"
+          name="lastName"
+          autocomplete="family-name"
+          [(ngModel)]="contactFormModel.lastName"
+          #lastName="ngModel"
+          required
+        />
+
+        @if (lastName.invalid && lastName.touched) {
+          <p class="contact__error">Last name is required.</p>
+        }
+      </div>
+
+      <div class="contact__field">
+        <label for="email">Email</label>
+
+        <input
+          id="email"
+          type="email"
+          name="email"
+          autocomplete="email"
+          [(ngModel)]="contactFormModel.email"
+          #email="ngModel"
+          required
+          email
+        />
+
+        @if (email.touched && email.errors?.['required']) {
+          <p class="contact__error">Email is required.</p>
+        }
+
+        @if (email.touched && email.errors?.['email']) {
+          <p class="contact__error">Enter a valid email address.</p>
+        }
+      </div>
+
+      <div class="contact__field">
+        <label for="description">Description</label>
+
+        <textarea
+          id="description"
+          name="description"
+          rows="6"
+          [(ngModel)]="contactFormModel.description"
+          #description="ngModel"
+          required
+        ></textarea>
+
+        @if (description.invalid && description.touched) {
+          <p class="contact__error">Description is required.</p>
+        }
+      </div>
+
+      <button class="contact__submit" type="submit">Submit</button>
+    </form>
+  </section>
 </div>
