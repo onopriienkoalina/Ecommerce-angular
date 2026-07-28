@@ -65,10 +65,7 @@
 
             @if (cartItems().length > 0) {
               <div class="order__field">
-                <label class="order__label" for="productId">
-                  Product
-                  <span aria-hidden="true">*</span>
-                </label>
+                <label class="order__label" for="productId"> View product details </label>
 
                 <select id="productId" class="order__control" formControlName="productId">
                   @for (item of cartItems(); track item.product.id) {
@@ -143,9 +140,15 @@
 
                 @if (
                   orderForm.controls.address.controls.country.touched &&
-                  orderForm.controls.address.controls.country.invalid
+                  orderForm.controls.address.controls.country.errors?.['required']
                 ) {
                   <p class="order__error">Country is required.</p>
+                }
+                @if (
+                  orderForm.controls.address.controls.country.touched &&
+                  orderForm.controls.address.controls.country.errors?.['minlength']
+                ) {
+                  <p class="order__error">Country must contain at least 2 characters.</p>
                 }
               </div>
 
@@ -166,9 +169,15 @@
 
                 @if (
                   orderForm.controls.address.controls.city.touched &&
-                  orderForm.controls.address.controls.city.invalid
+                  orderForm.controls.address.controls.city.errors?.['required']
                 ) {
                   <p class="order__error">City is required.</p>
+                }
+                @if (
+                  orderForm.controls.address.controls.city.touched &&
+                  orderForm.controls.address.controls.city.errors?.['minlength']
+                ) {
+                  <p class="order__error">City must contain at least 2 characters.</p>
                 }
               </div>
 
@@ -189,9 +198,15 @@
 
                 @if (
                   orderForm.controls.address.controls.street.touched &&
-                  orderForm.controls.address.controls.street.invalid
+                  orderForm.controls.address.controls.street.errors?.['required']
                 ) {
                   <p class="order__error">Address is required.</p>
+                }
+                @if (
+                  orderForm.controls.address.controls.street.touched &&
+                  orderForm.controls.address.controls.street.errors?.['minlength']
+                ) {
+                  <p class="order__error">Street must contain at least 2 characters.</p>
                 }
               </div>
             </div>

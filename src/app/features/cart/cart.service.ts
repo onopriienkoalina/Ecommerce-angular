@@ -102,7 +102,7 @@ export class CartService {
     );
   }
 
-  removeFromCart(prductId: number): void {
-    this.cartItems.update((items) => items.filter((item) => item.product.id !== prductId));
+  clearCart(): void {
+    this.cartItems.set([]);
   }
 }

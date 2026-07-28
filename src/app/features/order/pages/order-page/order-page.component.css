@@ -1,7 +1,3 @@
-:host {
-  display: block;
-}
-
 .order {
   width: min(100% - 32px, 1000px);
   margin: 0 auto;
@@ -189,7 +185,13 @@
   border-color: #00b207;
   box-shadow: 0 0 0 3px rgb(0 178 7 / 12%);
 }
+.order__control.ng-invalid.ng-touched {
+  border-color: #ea4b48;
+}
 
+.order__control.ng-valid.ng-touched {
+  border-color: #00b207;
+}
 .order__error {
   margin: 0;
   color: #ea4b48;

@@ -35,10 +35,15 @@
           [(ngModel)]="contactFormModel.firstName"
           #firstName="ngModel"
           required
+          minlength="2"
         />
 
-        @if (firstName.invalid && firstName.touched) {
+        @if (firstName.touched && firstName.errors?.['required']) {
           <p class="contact__error">First name is required.</p>
+        }
+
+        @if (firstName.touched && firstName.errors?.['minlength']) {
+          <p class="contact__error">First name must contain at least 2 characters.</p>
         }
       </div>
 
@@ -53,10 +58,14 @@
           [(ngModel)]="contactFormModel.lastName"
           #lastName="ngModel"
           required
+          minlength="2"
         />
 
-        @if (lastName.invalid && lastName.touched) {
+        @if (lastName.touched && lastName.errors?.['required']) {
           <p class="contact__error">Last name is required.</p>
+        }
+        @if (lastName.touched && lastName.errors?.['minlength']) {
+          <p class="contact__error">Last name must contain at least 2 characters.</p>
         }
       </div>
 
@@ -93,10 +102,18 @@
           [(ngModel)]="contactFormModel.description"
           #description="ngModel"
           required
+          minlength="10"
+          maxlength="500"
         ></textarea>
 
-        @if (description.invalid && description.touched) {
+        @if (description.touched && description.errors?.['required']) {
           <p class="contact__error">Description is required.</p>
+        }
+        @if (description.touched && description.errors?.['minlength']) {
+          <p class="contact__error">Description must contain at least 10 characters.</p>
+        }
+        @if (description.touched && description.errors?.['maxlength']) {
+          <p class="contact__error">Description must contain no more than 500 characters.</p>
         }
       </div>
 

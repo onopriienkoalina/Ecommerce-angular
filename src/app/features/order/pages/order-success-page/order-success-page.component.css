@@ -1,0 +1,110 @@
+.order-success {
+  width: min(100% - 32px, 1000px);
+  min-height: calc(100vh - 120px);
+  margin: 0 auto;
+  padding: 64px 0 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-success__content {
+  width: min(100%, 872px);
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 6%);
+  text-align: center;
+  display: flex;
+  gap: 40px;
+}
+
+.order-success__icon {
+  display: block;
+  width: 40%;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.order-success__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.order-success__title {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.2;
+}
+
+.order-success__description {
+  max-width: 460px;
+  margin: 16px auto 0;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.order-success__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  margin-top: 32px;
+  padding: 12px 28px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background-color: #00b207;
+  color: #ffffff;
+
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.order-success__button:hover {
+  background-color: #009b06;
+  box-shadow: 0 8px 20px rgb(0 178 7 / 20%);
+}
+
+.order-success__button:active {
+  transform: translateY(1px);
+}
+
+.order-success__button:focus-visible {
+  outline: 3px solid rgb(0 178 7 / 25%);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .order-success {
+    width: min(100% - 24px, 1000px);
+    min-height: auto;
+    padding: 40px 0 64px;
+  }
+
+  .order-success__content {
+    padding: 40px 20px;
+  }
+
+  .order-success__icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 24px;
+  }
+
+  .order-success__button {
+    width: 100%;
+  }
+}

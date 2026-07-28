@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { CartService } from '../../../cart/cart.service';
+import { Router } from '@angular/router';
+
 type PaymentMethod = 'card' | 'paypal' | 'cash';
 type DeliveryOption = 'today' | 'tomorrow' | 'custom';
 
@@ -15,6 +17,7 @@ type DeliveryOption = 'today' | 'tomorrow' | 'custom';
 })
 export class OrderPageComponent {
   private readonly cartService = inject(CartService);
+  private readonly router = inject(Router);
   protected readonly currentStep = signal(1);
   protected readonly cartItems = this.cartService.items;
   protected readonly cartTotalQuantity = this.cartService.totalQuantity;
@@ -28,20 +31,31 @@ export class OrderPageComponent {
     }),
 
     address: new FormGroup({
-      country: new FormControl(''),
-      city: new FormControl(''),
-      street: new FormControl(''),
+      country: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(2)],
+      }),
+      city: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(2)],
+      }),
+      street: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(2)],
+      }),
     }),
 
     payment: new FormGroup({
       method: new FormControl<PaymentMethod>('card', {
         nonNullable: true,
+        validators: [Validators.required],
       }),
     }),
 
     delivery: new FormGroup({
       option: new FormControl<DeliveryOption>('today', {
         nonNullable: true,
+        validators: [Validators.required],
       }),
       customDate: new FormControl('', {
         nonNullable: true,
@@ -49,6 +63,21 @@ export class OrderPageComponent {
     }),
   });
 
+  constructor() {
+    const deliveryControls = this.orderForm.controls.delivery.controls;
+    const optionControl = deliveryControls.option;
+    const customDateControl = deliveryControls.customDate;
+
+    optionControl.valueChanges.subscribe((option) => {
+      if (option === 'custom') {
+        customDateControl.addValidators(Validators.required);
+      } else {
+        customDateControl.removeValidators(Validators.required);
+        customDateControl.setValue('');
+      }
+      customDateControl.updateValueAndValidity();
+    });
+  }
   protected readonly selectedProductId = toSignal(
     this.orderForm.controls.product.controls.productId.valueChanges.pipe(
       startWith(this.orderForm.controls.product.controls.productId.value),
@@ -89,7 +118,7 @@ export class OrderPageComponent {
   }
 
   protected submitOrder(): void {
-    if (this.cartItems().length === 0 || this.orderForm.invalid || !this.isDeliveryStepValid()) {
+    if (this.cartItems().length === 0 || this.orderForm.invalid) {
       this.orderForm.markAllAsTouched();
       return;
     }
@@ -110,6 +139,9 @@ export class OrderPageComponent {
       totalPrice: this.cartTotalPrice(),
     };
     console.log('Submitted order:', orderData);
+
+    this.cartService.clearCart();
+    void this.router.navigate(['/order/thank-you']);
   }
 
   private isCurrentStepValid(): boolean {
@@ -121,20 +153,10 @@ export class OrderPageComponent {
       case 3:
         return this.orderForm.controls.payment.valid;
       case 4:
-        return this.isDeliveryStepValid();
+        return this.orderForm.controls.delivery.valid;
       default:
         return true;
     }
-  }
-
-  private isDeliveryStepValid(): boolean {
-    const delivery = this.orderForm.controls.delivery.getRawValue();
-
-    if (delivery.option !== 'custom') {
-      return true;
-    }
-
-    return delivery.customDate.trim().length > 0;
   }
 
   private markCurrentStepAsTouched(): void {
@@ -161,7 +183,7 @@ export class OrderPageComponent {
     this.cartService.updateQuantity(productId, quantity + 1);
   }
 
-  protected decreaseCartItem(productId: number): void {
-    this.cartService.removeFromCart(productId);
+  protected decreaseCartItem(productId: number, quantity: number): void {
+    this.cartService.updateQuantity(productId, quantity - 1);
   }
 }
