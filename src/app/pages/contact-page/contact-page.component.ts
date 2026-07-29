@@ -21,6 +21,8 @@ export class ContactPageComponent {
     description: '',
   };
 
+  protected isSubmitted = false;
+
   protected submitContactForm(contactForm: NgForm): void {
     if (contactForm.invalid) {
       contactForm.form.markAllAsTouched();
@@ -28,5 +30,18 @@ export class ContactPageComponent {
     }
 
     console.log('Contact form:', this.contactFormModel);
+
+    contactForm.resetForm({
+    firstName: '',
+    lastName: '',
+    email: '',
+    description: '',
+    });
+
+    this.isSubmitted = true;
   }
+
+  protected hideSuccessMessage(): void {
+  this.isSubmitted = false;
+}
 }

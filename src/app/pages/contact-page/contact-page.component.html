@@ -33,12 +33,18 @@
           name="firstName"
           autocomplete="given-name"
           [(ngModel)]="contactFormModel.firstName"
+          (ngModelChange)="hideSuccessMessage()"
           #firstName="ngModel"
           required
+          minlength="2"
         />
 
-        @if (firstName.invalid && firstName.touched) {
+        @if (firstName.touched && firstName.errors?.['required']) {
           <p class="contact__error">First name is required.</p>
+        }
+
+        @else if (firstName.touched && firstName.errors?.['minlength']) {
+          <p class="contact__error">First name must contain at least 2 characters.</p>
         }
       </div>
 
@@ -51,12 +57,17 @@
           name="lastName"
           autocomplete="family-name"
           [(ngModel)]="contactFormModel.lastName"
+          (ngModelChange)="hideSuccessMessage()"
           #lastName="ngModel"
           required
+          minlength="2"
         />
 
-        @if (lastName.invalid && lastName.touched) {
+        @if (lastName.touched && lastName.errors?.['required']) {
           <p class="contact__error">Last name is required.</p>
+        }
+        @else if (lastName.touched && lastName.errors?.['minlength']) {
+          <p class="contact__error">Last name must contain at least 2 characters.</p>
         }
       </div>
 
@@ -69,6 +80,7 @@
           name="email"
           autocomplete="email"
           [(ngModel)]="contactFormModel.email"
+          (ngModelChange)="hideSuccessMessage()"
           #email="ngModel"
           required
           email
@@ -78,7 +90,7 @@
           <p class="contact__error">Email is required.</p>
         }
 
-        @if (email.touched && email.errors?.['email']) {
+        @else if (email.touched && email.errors?.['email']) {
           <p class="contact__error">Enter a valid email address.</p>
         }
       </div>
@@ -91,15 +103,28 @@
           name="description"
           rows="6"
           [(ngModel)]="contactFormModel.description"
+          (ngModelChange)="hideSuccessMessage()"
           #description="ngModel"
           required
+          minlength="10"
+          maxlength="500"
         ></textarea>
 
-        @if (description.invalid && description.touched) {
+        @if (description.touched && description.errors?.['required']) {
           <p class="contact__error">Description is required.</p>
         }
+        @else if (description.touched && description.errors?.['minlength']) {
+          <p class="contact__error">Description must contain at least 10 characters.</p>
+        }
+        @else if (description.touched && description.errors?.['maxlength']) {
+          <p class="contact__error">Description must contain no more than 500 characters.</p>
+        }
       </div>
-
+      @if (isSubmitted) {
+          <p class="contact__success" role="status">
+    Thank you! Your message has been sent successfully.
+  </p>
+      }
       <button class="contact__submit" type="submit">Submit</button>
     </form>
   </section>

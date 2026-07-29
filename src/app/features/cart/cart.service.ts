@@ -16,6 +16,18 @@ export class CartService {
 
   readonly items = this.cartItems.asReadonly();
 
+  private readonly orderSubmitted = signal(false);
+
+  readonly isOrderSubmitted = this.orderSubmitted.asReadonly();
+
+  markOrderAsSubmitted(): void {
+    this.orderSubmitted.set(true);
+  }
+
+  resetOrderSubmission() {
+    this.orderSubmitted.set(false);
+  }
+  
   readonly totalQuantity = computed(() =>
     this.cartItems().reduce((total, item) => total + item.quantity, 0),
   );
@@ -102,7 +114,13 @@ export class CartService {
     );
   }
 
-  removeFromCart(prductId: number): void {
-    this.cartItems.update((items) => items.filter((item) => item.product.id !== prductId));
+  removeFromCart(productId: number): void {
+    this.cartItems.update((items) =>
+    items.filter((item) => item.product.id !== productId),
+    );
+  }
+
+  clearCart(): void {
+    this.cartItems.set([]);
   }
 }
