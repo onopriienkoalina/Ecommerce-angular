@@ -93,17 +93,53 @@
                     <p class="order__product-description">
                       {{ item.product.description }}
                     </p>
-
-                    <p>Quantity: {{ item.quantity }}</p>
+<div class="order__product-info">
+  <div class="order__cart-text">
 
                     <p class="order__product-price">
+                      Price:
                       {{ item.product.price | currency: 'EUR' }}
                     </p>
                     <p class="order__product-price">
                       Subtotal:
                       {{ item.product.price * item.quantity | currency: 'EUR' }}
                     </p>
-                  </div>
+                    </div>
+                
+                  <div class="order__cart-actions">
+                    <div class="order__quantity">
+        <button
+          type="button"
+          class="order__quantity-button"
+          aria-label="Decrease quantity"
+          (click)="decreaseCartItem(item.product.id, item.quantity)"
+        >
+          −
+        </button>
+
+        <span class="order__quantity-value">
+          {{ item.quantity }}
+        </span>
+
+        <button
+          type="button"
+          class="order__quantity-button"
+          aria-label="Increase quantity"
+          (click)="increaseCartItem(item.product.id, item.quantity)"
+        >
+          +
+        </button>
+        </div>
+              <button
+        type="button"
+        class="order__remove-button"
+        (click)="removeCartItem(item.product.id)"
+      >
+        ×
+      </button>
+    </div>
+</div>
+</div>
                 </article>
               }
             } @else {
@@ -144,7 +180,7 @@
                 ) {
                   <p class="order__error">Country is required.</p>
                 }
-                @if (
+                @else if (
                   orderForm.controls.address.controls.country.touched &&
                   orderForm.controls.address.controls.country.errors?.['minlength']
                 ) {
@@ -173,7 +209,7 @@
                 ) {
                   <p class="order__error">City is required.</p>
                 }
-                @if (
+                @else if (
                   orderForm.controls.address.controls.city.touched &&
                   orderForm.controls.address.controls.city.errors?.['minlength']
                 ) {
@@ -202,11 +238,11 @@
                 ) {
                   <p class="order__error">Address is required.</p>
                 }
-                @if (
+                @else if (
                   orderForm.controls.address.controls.street.touched &&
                   orderForm.controls.address.controls.street.errors?.['minlength']
                 ) {
-                  <p class="order__error">Street must contain at least 2 characters.</p>
+                  <p class="order__error">Address must contain at least 2 characters.</p>
                 }
               </div>
             </div>
@@ -444,7 +480,7 @@
       }
 
       @if (currentStep() < 5) {
-        <button type="button" class="order__button order__button--primary" (click)="goToNextStep()">
+        <button type="button" class="order__button order__button--primary" (click)="goToNextStep()" [disabled]="currentStep() === 1 && cartItems().length === 0">
           Next step
         </button>
       }

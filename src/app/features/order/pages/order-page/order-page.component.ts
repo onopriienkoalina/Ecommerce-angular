@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { CartService } from '../../../cart/cart.service';
 import { Router } from '@angular/router';
@@ -48,14 +48,12 @@ export class OrderPageComponent {
     payment: new FormGroup({
       method: new FormControl<PaymentMethod>('card', {
         nonNullable: true,
-        validators: [Validators.required],
       }),
     }),
 
     delivery: new FormGroup({
       option: new FormControl<DeliveryOption>('today', {
         nonNullable: true,
-        validators: [Validators.required],
       }),
       customDate: new FormControl('', {
         nonNullable: true,
@@ -68,7 +66,7 @@ export class OrderPageComponent {
     const optionControl = deliveryControls.option;
     const customDateControl = deliveryControls.customDate;
 
-    optionControl.valueChanges.subscribe((option) => {
+    optionControl.valueChanges.pipe(takeUntilDestroyed()).subscribe((option) => {
       if (option === 'custom') {
         customDateControl.addValidators(Validators.required);
       } else {
@@ -140,6 +138,7 @@ export class OrderPageComponent {
     };
     console.log('Submitted order:', orderData);
 
+    this.cartService.markOrderAsSubmitted();
     this.cartService.clearCart();
     void this.router.navigate(['/order/thank-you']);
   }
@@ -184,6 +183,14 @@ export class OrderPageComponent {
   }
 
   protected decreaseCartItem(productId: number, quantity: number): void {
+    if (quantity === 1) {
+      this.cartService.removeFromCart(productId);
+      return;
+    }
     this.cartService.updateQuantity(productId, quantity - 1);
+  }
+
+  protected removeCartItem(productId: number): void {
+    this.cartService.removeFromCart(productId);
   }
 }
