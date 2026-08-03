@@ -233,7 +233,9 @@
   font-size: 20px;
   font-weight: 600;
 }
-.order__product-info, .order__cart-text, .order__cart-actions{
+.order__product-info,
+.order__cart-text,
+.order__cart-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -27,7 +27,7 @@ export class CartService {
   resetOrderSubmission() {
     this.orderSubmitted.set(false);
   }
-  
+
   readonly totalQuantity = computed(() =>
     this.cartItems().reduce((total, item) => total + item.quantity, 0),
   );
@@ -115,9 +115,7 @@ export class CartService {
   }
 
   removeFromCart(productId: number): void {
-    this.cartItems.update((items) =>
-    items.filter((item) => item.product.id !== productId),
-    );
+    this.cartItems.update((items) => items.filter((item) => item.product.id !== productId));
   }
 
   clearCart(): void {

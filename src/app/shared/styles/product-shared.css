@@ -34,3 +34,37 @@
   font-size: 13px;
   line-height: 1.4;
 }
+.add__product-btn {
+  align-self: flex-end;
+
+  min-height: 48px;
+  padding: 12px 28px;
+
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background-color: #00b207;
+  color: #ffffff;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+.add__product-btn:hover {
+  background-color: #009b06;
+  box-shadow: 0 8px 20px rgb(0 178 7 / 20%);
+}
+
+.add__product-btn:active {
+  transform: translateY(1px);
+}
+
+.add__product-btn:focus-visible {
+  outline: 3px solid rgb(0 178 7 / 25%);
+  outline-offset: 3px;
+}

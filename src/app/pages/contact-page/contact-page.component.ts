@@ -32,16 +32,16 @@ export class ContactPageComponent {
     console.log('Contact form:', this.contactFormModel);
 
     contactForm.resetForm({
-    firstName: '',
-    lastName: '',
-    email: '',
-    description: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      description: '',
     });
 
     this.isSubmitted = true;
   }
 
   protected hideSuccessMessage(): void {
-  this.isSubmitted = false;
-}
+    this.isSubmitted = false;
+  }
 }
