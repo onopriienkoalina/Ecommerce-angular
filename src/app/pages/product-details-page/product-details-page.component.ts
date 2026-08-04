@@ -23,7 +23,10 @@ export class ProductDetailsPageComponent {
     this.route.paramMap.pipe(
       map((params) => Number(params.get('id'))),
       distinctUntilChanged(),
-      tap(() => this.selectedImage.set(null)),
+      tap(() => {
+        this.selectedImage.set(null);
+        this.quantity.set(1);
+      }),
     ),
     { initialValue: 0 },
   );

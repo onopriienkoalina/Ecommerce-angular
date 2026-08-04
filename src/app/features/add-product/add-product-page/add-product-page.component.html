@@ -52,6 +52,11 @@
         <input id="price" type="number" min="0.01" step="0.01" formControlName="price" />
 
         @if (
+          addProductForm.controls.price.touched &&
+          addProductForm.controls.price.errors?.['required']
+        ) {
+          <p class="add-product__error">Price is required.</p>
+        } @else if (
           addProductForm.controls.price.touched && addProductForm.controls.price.errors?.['min']
         ) {
           <p class="add-product__error">Price must be greater than 0.</p>
@@ -65,9 +70,19 @@
 
         @if (
           addProductForm.controls.oldPrice.touched &&
+          addProductForm.controls.oldPrice.errors?.['required']
+        ) {
+          <p class="add-product__error">Old price is required.</p>
+        } @else if (
+          addProductForm.controls.oldPrice.touched &&
           addProductForm.controls.oldPrice.errors?.['min']
         ) {
           <p class="add-product__error">Old price must be greater than 0.</p>
+        } @else if (
+          addProductForm.controls.oldPrice.touched &&
+          addProductForm.controls.oldPrice.errors?.['oldPriceGreater']
+        ) {
+          <p class="add-product__error">Old price must be greater than the current price.</p>
         }
       </div>
     </div>
@@ -87,6 +102,7 @@
         cancelLabel="Clear"
         (onSelect)="selectMainImage($event)"
         (onClear)="clearMainImage()"
+        (onRemove)="clearMainImage()"
       >
         <ng-template #empty>
           <p>Drag and drop the main product image here.</p>
@@ -120,6 +136,7 @@
         cancelLabel="Clear"
         (onSelect)="selectGalleryImages($event)"
         (onClear)="clearGalleryImages()"
+        (onRemove)="removeGalleryImage($event)"
       >
         <ng-template #empty>
           <p>Drag and drop up to four gallery images here.</p>
@@ -129,7 +146,11 @@
       @if (galleryImagesPreview().length > 0) {
         <div class="add-product__gallery">
           @for (image of galleryImagesPreview(); track image) {
-            <img class="add-product__gallery-image" [src]="image" alt="Product gallery preview" />
+            <img
+              class="add-product__gallery-image"
+              [src]="image.previewUrl"
+              alt="Product gallery preview"
+            />
           }
         </div>
       }

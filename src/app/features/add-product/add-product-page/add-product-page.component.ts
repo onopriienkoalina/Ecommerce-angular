@@ -1,10 +1,36 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  ValidationErrors,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileSelectEvent, FileUploadModule, FileRemoveEvent } from 'primeng/fileupload';
 import { ProductsService } from '../../products/products.service';
 import type { Product } from '../../products/product';
 
+interface ImagePreview {
+  file: File;
+  previewUrl: string;
+}
+
+const oldPriceGreaterValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const price = control.get('price')?.value;
+  const oldPrice = control.get('oldPrice')?.value;
+
+  if (typeof price !== 'number' || typeof oldPrice !== 'number') {
+    return null;
+  }
+  if (oldPrice <= price) {
+    return { oldPriceGreater: true };
+  }
+  return null;
+};
 @Component({
   selector: 'app-add-product-page',
   imports: [ReactiveFormsModule, FileUploadModule],
@@ -17,17 +43,22 @@ export class AddProductPageComponent {
   private readonly router = inject(Router);
 
   protected readonly mainImagePreview = signal<string | null>(null);
-  protected readonly galleryImagesPreview = signal<string[]>([]);
+  protected readonly galleryImagesPreview = signal<ImagePreview[]>([]);
 
   protected readonly mainImageError = signal<string | null>(null);
   protected readonly galleryImagesError = signal<string | null>(null);
 
-  protected readonly addProductForm = this.formBuilder.nonNullable.group({
-    title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-    description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
-    price: [0, [Validators.required, Validators.min(0.01)]],
-    oldPrice: [0, [Validators.required, Validators.min(0.01)]],
-  });
+  protected readonly addProductForm = this.formBuilder.nonNullable.group(
+    {
+      title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      price: [0, [Validators.required, Validators.min(0.01)]],
+      oldPrice: [0, [Validators.required, Validators.min(0.01)]],
+    },
+    {
+      validators: [oldPriceGreaterValidator],
+    },
+  );
 
   protected async selectMainImage(event: FileSelectEvent): Promise<void> {
     const file = event.files[0];
@@ -46,14 +77,21 @@ export class AddProductPageComponent {
   }
 
   protected async selectGalleryImages(event: FileSelectEvent): Promise<void> {
-    const files = Array.from(event.files);
-    if (!event.files || event.files.length === 0) {
+    if (event.files.length === 0) {
       return;
     }
+
+    const files = Array.from(event.files);
+
     this.galleryImagesError.set(null);
 
     try {
-      const previews = await Promise.all(files.map((file) => this.readFileAsDataURL(file)));
+      const previews = await Promise.all(
+        files.map(async (file): Promise<ImagePreview> => ({
+          file,
+          previewUrl: await this.readFileAsDataURL(file),
+        })),
+      );
 
       this.galleryImagesPreview.set(previews);
     } catch {
@@ -80,40 +118,43 @@ export class AddProductPageComponent {
 
   protected clearMainImage(): void {
     this.mainImagePreview.set(null);
+    this.mainImageError.set(null);
   }
 
   protected clearGalleryImages(): void {
     this.galleryImagesPreview.set([]);
+    this.galleryImagesError.set(null);
+  }
+
+  protected removeGalleryImage(event: FileRemoveEvent): void {
+    this.galleryImagesPreview.update((previews) =>
+      previews.filter((preview) => preview.file !== event.file),
+    );
+
+    this.galleryImagesError.set(null);
   }
 
   protected submitForm(): void {
+    const mainImage = this.mainImagePreview();
+    const galleryImages = this.galleryImagesPreview();
+
     if (this.addProductForm.invalid) {
       this.addProductForm.markAllAsTouched();
     }
 
-    if (!this.mainImagePreview()) {
+    if (!mainImage) {
       this.mainImageError.set('Main image is required.');
     }
 
-    if (this.galleryImagesPreview().length === 0) {
+    if (galleryImages.length === 0) {
       this.galleryImagesError.set('At least one gallery image is required.');
     }
 
-    if (
-      this.addProductForm.invalid ||
-      !this.mainImagePreview() ||
-      this.galleryImagesPreview().length === 0
-    ) {
+    if (this.addProductForm.invalid || !mainImage || galleryImages.length === 0) {
       return;
     }
 
     const formValue = this.addProductForm.getRawValue();
-    const mainImage = this.mainImagePreview();
-
-    if (!mainImage) {
-      this.mainImageError.set('Main image is required.');
-      return;
-    }
 
     const newProduct: Product = {
       id: this.createProductId(),
@@ -122,7 +163,7 @@ export class AddProductPageComponent {
       price: formValue.price,
       oldPrice: formValue.oldPrice,
       imageUrl: mainImage,
-      galleryImages: this.galleryImagesPreview(),
+      galleryImages: galleryImages.map((image) => image.previewUrl),
       rating: '/rating.svg',
     };
 
