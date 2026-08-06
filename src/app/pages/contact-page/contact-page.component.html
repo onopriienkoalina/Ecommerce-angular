@@ -41,9 +41,7 @@
 
         @if (firstName.touched && firstName.errors?.['required']) {
           <p class="contact__error">First name is required.</p>
-        }
-
-        @else if (firstName.touched && firstName.errors?.['minlength']) {
+        } @else if (firstName.touched && firstName.errors?.['minlength']) {
           <p class="contact__error">First name must contain at least 2 characters.</p>
         }
       </div>
@@ -65,8 +63,7 @@
 
         @if (lastName.touched && lastName.errors?.['required']) {
           <p class="contact__error">Last name is required.</p>
-        }
-        @else if (lastName.touched && lastName.errors?.['minlength']) {
+        } @else if (lastName.touched && lastName.errors?.['minlength']) {
           <p class="contact__error">Last name must contain at least 2 characters.</p>
         }
       </div>
@@ -88,9 +85,7 @@
 
         @if (email.touched && email.errors?.['required']) {
           <p class="contact__error">Email is required.</p>
-        }
-
-        @else if (email.touched && email.errors?.['email']) {
+        } @else if (email.touched && email.errors?.['email']) {
           <p class="contact__error">Enter a valid email address.</p>
         }
       </div>
@@ -112,18 +107,16 @@
 
         @if (description.touched && description.errors?.['required']) {
           <p class="contact__error">Description is required.</p>
-        }
-        @else if (description.touched && description.errors?.['minlength']) {
+        } @else if (description.touched && description.errors?.['minlength']) {
           <p class="contact__error">Description must contain at least 10 characters.</p>
-        }
-        @else if (description.touched && description.errors?.['maxlength']) {
+        } @else if (description.touched && description.errors?.['maxlength']) {
           <p class="contact__error">Description must contain no more than 500 characters.</p>
         }
       </div>
       @if (isSubmitted) {
-          <p class="contact__success" role="status">
-    Thank you! Your message has been sent successfully.
-  </p>
+        <p class="contact__success" role="status">
+          Thank you! Your message has been sent successfully.
+        </p>
       }
       <button class="contact__submit" type="submit">Submit</button>
     </form>

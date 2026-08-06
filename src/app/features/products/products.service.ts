@@ -1,21 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import type { Product, DiscountTheme, ProductCard } from './product';
-import { products } from '../../../assets/products.data';
-import { Observable, of, map } from 'rxjs';
+import { products as initialProducts } from '../../../assets/products.data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private readonly products: Product[] = products;
+  private readonly productItems = signal<Product[]>([...initialProducts]);
 
-  getProducts(): Observable<ProductCard[]> {
-    return of(this.products).pipe(
-      map((productList) =>
-        productList.map((product, index) => this.mapToProductCard(product, index)),
-      ),
-    );
-  }
+  readonly productCards = computed<ProductCard[]>(() =>
+    this.productItems().map((product, index) => this.mapToProductCard(product, index)),
+  );
 
   private mapToProductCard(product: Product, index: number): ProductCard {
     const discountPercent = this.calculateDiscountPercent(product);
@@ -44,9 +39,11 @@ export class ProductsService {
     return 50;
   }
 
-  getProductById(id: number): Observable<ProductCard | undefined> {
-    return this.getProducts().pipe(
-      map((products) => products.find((product) => product.id === id)),
-    );
+  getProductById(id: number): ProductCard | undefined {
+    return this.productCards().find((product) => product.id === id);
+  }
+
+  addProduct(product: Product): void {
+    this.productItems.update((currentProducts) => [...currentProducts, product]);
   }
 }

@@ -7,8 +7,8 @@ export const orderSubmittedGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (cartService.isOrderSubmitted()) {
-     return true;
+    return true;
   }
- 
+
   return router.createUrlTree(['/']);
 };

@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, map, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged, map, tap } from 'rxjs';
 import { ProductsService } from '../../features/products/products.service';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../features/cart/cart.service';
@@ -19,18 +19,20 @@ export class ProductDetailsPageComponent {
   protected readonly quantity = signal<number>(1);
   private readonly cartService = inject(CartService);
 
-  private readonly productId = this.route.paramMap.pipe(
-    map((params) => Number(params.get('id'))),
-    distinctUntilChanged(),
-    tap(() => {
-      this.selectedImage.set(null);
-      this.quantity.set(1);
-    }),
+  private readonly productId = toSignal(
+    this.route.paramMap.pipe(
+      map((params) => Number(params.get('id'))),
+      distinctUntilChanged(),
+      tap(() => {
+        this.selectedImage.set(null);
+        this.quantity.set(1);
+      }),
+    ),
+    { initialValue: 0 },
   );
 
-  protected readonly product = toSignal(
-    this.productId.pipe(switchMap((id) => this.productsService.getProductById(id))),
-    { initialValue: undefined },
+  protected readonly product = computed(() =>
+    this.productsService.getProductById(this.productId()),
   );
 
   protected readonly currentImage = computed(() => {
