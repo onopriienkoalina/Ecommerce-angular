@@ -10,7 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { FileSelectEvent, FileUploadModule, FileRemoveEvent } from 'primeng/fileupload';
 import { ProductsService } from '../../products/products.service';
-import type { Product } from '../../products/product';
+import type { ProductData } from '../../products/product';
 
 interface ImagePreview {
   file: File;
@@ -47,6 +47,9 @@ export class AddProductPageComponent {
 
   protected readonly mainImageError = signal<string | null>(null);
   protected readonly galleryImagesError = signal<string | null>(null);
+
+  protected readonly isSubmitting = signal(false);
+  protected readonly submissionError = signal<string | null>(null);
 
   protected readonly addProductForm = this.formBuilder.nonNullable.group(
     {
@@ -134,7 +137,7 @@ export class AddProductPageComponent {
     this.galleryImagesError.set(null);
   }
 
-  protected submitForm(): void {
+  protected async submitForm(): Promise<void> {
     const mainImage = this.mainImagePreview();
     const galleryImages = this.galleryImagesPreview();
 
@@ -156,8 +159,7 @@ export class AddProductPageComponent {
 
     const formValue = this.addProductForm.getRawValue();
 
-    const newProduct: Product = {
-      id: this.createProductId(),
+    const newProduct: ProductData = {
       title: formValue.title,
       description: formValue.description,
       price: formValue.price,
@@ -167,12 +169,17 @@ export class AddProductPageComponent {
       rating: '/rating.svg',
     };
 
-    this.productsService.addProduct(newProduct);
-    void this.router.navigate(['/']);
-  }
+    this.isSubmitting.set(true);
+    this.submissionError.set(null);
 
-  private createProductId(): number {
-    const productIds = this.productsService.productCards().map((product) => product.id);
-    return productIds.length > 0 ? Math.max(...productIds) + 1 : 1;
+    try {
+      await this.productsService.addProduct(newProduct);
+      void this.router.navigate(['/']);
+    } catch (error: unknown) {
+      console.error('Failed to add product:', error);
+      this.submissionError.set('Failed to add product.');
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 }
