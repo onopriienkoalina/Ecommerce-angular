@@ -79,8 +79,9 @@
         ) {
           <p class="add-product__error">Old price must be greater than 0.</p>
         } @else if (
-          addProductForm.controls.oldPrice.touched &&
-          addProductForm.controls.oldPrice.errors?.['oldPriceGreater']
+          (addProductForm.controls.price.touched ||
+          addProductForm.controls.oldPrice.touched) &&
+          addProductForm.errors?.['oldPriceGreater']
         ) {
           <p class="add-product__error">Old price must be greater than the current price.</p>
         }
@@ -161,7 +162,17 @@
         </p>
       }
     </div>
-
-    <button type="submit" class="add__product-btn add-product__submit">Add product</button>
+    @if (submissionError(); as error) {
+      <p class="add-product__error" role="alert">
+        {{ error }}
+      </p>
+    }
+    <button type="submit" class="add__product-btn add-product__submit" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        <span class="add-product__submit-text">Adding product...</span>
+      } @else {
+        <span class="add-product__submit-text">Add product</span>
+      }
+    </button>
   </form>
 </section>

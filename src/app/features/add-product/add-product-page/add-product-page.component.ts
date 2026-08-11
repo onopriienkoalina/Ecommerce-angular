@@ -138,8 +138,13 @@ export class AddProductPageComponent {
   }
 
   protected async submitForm(): Promise<void> {
+    if (this.isSubmitting()) {
+      return;
+    }
+    
     const mainImage = this.mainImagePreview();
     const galleryImages = this.galleryImagesPreview();
+
 
     if (this.addProductForm.invalid) {
       this.addProductForm.markAllAsTouched();
