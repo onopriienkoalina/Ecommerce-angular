@@ -24,7 +24,7 @@ export class CartService {
     this.orderSubmitted.set(true);
   }
 
-  resetOrderSubmission() {
+  resetOrderSubmission(): void {
     this.orderSubmitted.set(false);
   }
 
@@ -93,13 +93,13 @@ export class CartService {
     const productData = product as Record<string, unknown>;
 
     return (
-      typeof productData['id'] === 'number' &&
+      typeof productData['id'] === 'string' &&
       typeof item['quantity'] === 'number' &&
       item['quantity'] > 0
     );
   }
 
-  updateQuantity(productId: number, quantity: number): void {
+  updateQuantity(productId: string, quantity: number): void {
     const safeQuantity = Math.max(1, Math.floor(quantity));
 
     this.cartItems.update((items) =>
@@ -114,7 +114,7 @@ export class CartService {
     );
   }
 
-  removeFromCart(productId: number): void {
+  removeFromCart(productId: string): void {
     this.cartItems.update((items) => items.filter((item) => item.product.id !== productId));
   }
 

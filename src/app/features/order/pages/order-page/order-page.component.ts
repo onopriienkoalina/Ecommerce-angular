@@ -25,7 +25,7 @@ export class OrderPageComponent {
 
   protected readonly orderForm = new FormGroup({
     product: new FormGroup({
-      productId: new FormControl<number | null>(this.cartItems()[0]?.product.id ?? null, {
+      productId: new FormControl<string | null>(this.cartItems()[0]?.product.id ?? null, {
         validators: [Validators.required],
       }),
     }),
@@ -178,11 +178,11 @@ export class OrderPageComponent {
     }
   }
 
-  protected increaseCartItem(productId: number, quantity: number): void {
+  protected increaseCartItem(productId: string, quantity: number): void {
     this.cartService.updateQuantity(productId, quantity + 1);
   }
 
-  protected decreaseCartItem(productId: number, quantity: number): void {
+  protected decreaseCartItem(productId: string, quantity: number): void {
     if (quantity === 1) {
       this.cartService.removeFromCart(productId);
       return;
@@ -190,7 +190,7 @@ export class OrderPageComponent {
     this.cartService.updateQuantity(productId, quantity - 1);
   }
 
-  protected removeCartItem(productId: number): void {
+  protected removeCartItem(productId: string): void {
     this.cartService.removeFromCart(productId);
   }
 }
