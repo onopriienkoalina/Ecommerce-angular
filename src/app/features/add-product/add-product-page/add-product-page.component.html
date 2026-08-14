@@ -1,8 +1,8 @@
-<section class="add-product">
-  <h1 class="add-product__title">Add new product</h1>
+<section class="product">
+  <h1 class="product__title">Add new product</h1>
 
-  <form class="add-product__form" [formGroup]="addProductForm" (ngSubmit)="submitForm()" novalidate>
-    <div class="add-product__field">
+  <form class="product__form" [formGroup]="addProductForm" (ngSubmit)="submitForm()" novalidate>
+    <div class="product__field">
       <label for="title">Title</label>
 
       <input id="title" type="text" formControlName="title" />
@@ -10,19 +10,19 @@
       @if (
         addProductForm.controls.title.touched && addProductForm.controls.title.errors?.['required']
       ) {
-        <p class="add-product__error">Title is required.</p>
+        <p class="product__error">Title is required.</p>
       } @else if (
         addProductForm.controls.title.touched && addProductForm.controls.title.errors?.['minlength']
       ) {
-        <p class="add-product__error">Title must contain at least 2 characters.</p>
+        <p class="product__error">Title must contain at least 2 characters.</p>
       } @else if (
         addProductForm.controls.title.touched && addProductForm.controls.title.errors?.['maxlength']
       ) {
-        <p class="add-product__error">Title must contain no more than 100 characters.</p>
+        <p class="product__error">Title must contain no more than 100 characters.</p>
       }
     </div>
 
-    <div class="add-product__field">
+    <div class="product__field">
       <label for="description">Description</label>
 
       <textarea id="description" rows="6" formControlName="description"></textarea>
@@ -31,22 +31,22 @@
         addProductForm.controls.description.touched &&
         addProductForm.controls.description.errors?.['required']
       ) {
-        <p class="add-product__error">Description is required.</p>
+        <p class="product__error">Description is required.</p>
       } @else if (
         addProductForm.controls.description.touched &&
         addProductForm.controls.description.errors?.['minlength']
       ) {
-        <p class="add-product__error">Description must contain at least 10 characters.</p>
+        <p class="product__error">Description must contain at least 10 characters.</p>
       } @else if (
         addProductForm.controls.description.touched &&
         addProductForm.controls.description.errors?.['maxlength']
       ) {
-        <p class="add-product__error">Description must contain no more than 500 characters.</p>
+        <p class="product__error">Description must contain no more than 500 characters.</p>
       }
     </div>
 
-    <div class="add-product__prices">
-      <div class="add-product__field">
+    <div class="product__prices">
+      <div class="product__field">
         <label for="price">Price</label>
 
         <input id="price" type="number" min="0.01" step="0.01" formControlName="price" />
@@ -55,15 +55,15 @@
           addProductForm.controls.price.touched &&
           addProductForm.controls.price.errors?.['required']
         ) {
-          <p class="add-product__error">Price is required.</p>
+          <p class="product__error">Price is required.</p>
         } @else if (
           addProductForm.controls.price.touched && addProductForm.controls.price.errors?.['min']
         ) {
-          <p class="add-product__error">Price must be greater than 0.</p>
+          <p class="product__error">Price must be greater than 0.</p>
         }
       </div>
 
-      <div class="add-product__field">
+      <div class="product__field">
         <label for="oldPrice">Old price</label>
 
         <input id="oldPrice" type="number" min="0.01" step="0.01" formControlName="oldPrice" />
@@ -72,24 +72,24 @@
           addProductForm.controls.oldPrice.touched &&
           addProductForm.controls.oldPrice.errors?.['required']
         ) {
-          <p class="add-product__error">Old price is required.</p>
+          <p class="product__error">Old price is required.</p>
         } @else if (
           addProductForm.controls.oldPrice.touched &&
           addProductForm.controls.oldPrice.errors?.['min']
         ) {
-          <p class="add-product__error">Old price must be greater than 0.</p>
+          <p class="product__error">Old price must be greater than 0.</p>
         } @else if (
           (addProductForm.controls.price.touched ||
           addProductForm.controls.oldPrice.touched) &&
           addProductForm.errors?.['oldPriceGreater']
         ) {
-          <p class="add-product__error">Old price must be greater than the current price.</p>
+          <p class="product__error">Old price must be greater than the current price.</p>
         }
       </div>
     </div>
 
-    <div class="add-product__field">
-      <span class="add-product__label"> Main product image </span>
+    <div class="product__field">
+      <span class="product__label"> Main product image </span>
 
       <p-fileupload
         mode="advanced"
@@ -111,18 +111,18 @@
       </p-fileupload>
 
       @if (mainImagePreview(); as imagePreview) {
-        <img class="add-product__preview" [src]="imagePreview" alt="Main product preview" />
+        <img class="product__preview" [src]="imagePreview" alt="Main product preview" />
       }
 
       @if (mainImageError(); as error) {
-        <p class="add-product__error" role="alert">
+        <p class="product__error" role="alert">
           {{ error }}
         </p>
       }
     </div>
 
-    <div class="add-product__field">
-      <span class="add-product__label"> Gallery images </span>
+    <div class="product__field">
+      <span class="product__label"> Gallery images </span>
 
       <p-fileupload
         mode="advanced"
@@ -145,10 +145,10 @@
       </p-fileupload>
 
       @if (galleryImagesPreview().length > 0) {
-        <div class="add-product__gallery">
+        <div class="product__gallery">
           @for (image of galleryImagesPreview(); track image) {
             <img
-              class="add-product__gallery-image"
+              class="product__gallery-image"
               [src]="image.previewUrl"
               alt="Product gallery preview"
             />
@@ -157,21 +157,21 @@
       }
 
       @if (galleryImagesError(); as error) {
-        <p class="add-product__error" role="alert">
+        <p class="product__error" role="alert">
           {{ error }}
         </p>
       }
     </div>
     @if (submissionError(); as error) {
-      <p class="add-product__error" role="alert">
+      <p class="product__error" role="alert">
         {{ error }}
       </p>
     }
-    <button type="submit" class="add__product-btn add-product__submit" [disabled]="isSubmitting()">
+    <button type="submit" class="product-btn add-product__submit" [disabled]="isSubmitting()">
       @if (isSubmitting()) {
-        <span class="add-product__submit-text">Adding product...</span>
+        <span class="product__submit-text">Adding product...</span>
       } @else {
-        <span class="add-product__submit-text">Add product</span>
+        <span class="product__submit-text">Add product</span>
       }
     </button>
   </form>

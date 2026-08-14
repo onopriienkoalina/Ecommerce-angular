@@ -38,7 +38,24 @@ service cloud.firestore {
         request.resource.data.price > 0 &&
         request.resource.data.oldPrice > request.resource.data.price;
 
-      allow update, delete: if false;
+      allow update: if
+        request.resource.data
+          .diff(resource.data)
+          .affectedKeys()
+          .hasOnly([
+            'title',
+            'description',
+            'price',
+            'oldPrice'
+          ]) &&
+        request.resource.data.title is string &&
+        request.resource.data.description is string &&
+        request.resource.data.price is number &&
+        request.resource.data.oldPrice is number &&
+        request.resource.data.price > 0 &&
+        request.resource.data.oldPrice > request.resource.data.price;
+
+      allow delete: if true;
     }
   }
 }
