@@ -79,8 +79,7 @@
         ) {
           <p class="product__error">Old price must be greater than 0.</p>
         } @else if (
-          (addProductForm.controls.price.touched ||
-          addProductForm.controls.oldPrice.touched) &&
+          (addProductForm.controls.price.touched || addProductForm.controls.oldPrice.touched) &&
           addProductForm.errors?.['oldPriceGreater']
         ) {
           <p class="product__error">Old price must be greater than the current price.</p>

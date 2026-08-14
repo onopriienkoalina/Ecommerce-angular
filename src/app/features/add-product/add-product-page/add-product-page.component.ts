@@ -1,8 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FileSelectEvent, FileUploadModule, FileRemoveEvent } from 'primeng/fileupload';
 import { ProductsService } from '../../products/products.service';
@@ -112,10 +109,9 @@ export class AddProductPageComponent {
     if (this.isSubmitting()) {
       return;
     }
-    
+
     const mainImage = this.mainImagePreview();
     const galleryImages = this.galleryImagesPreview();
-
 
     if (this.addProductForm.invalid) {
       this.addProductForm.markAllAsTouched();

@@ -1,5 +1,5 @@
-import { FormBuilder,  Validators } from '@angular/forms';
-import {oldPriceGreaterValidator} from '../products/product.validators';
+import { FormBuilder, Validators } from '@angular/forms';
+import { oldPriceGreaterValidator } from '../products/product.validators';
 export const createProductForm = (formBuilder: FormBuilder) => {
   return formBuilder.nonNullable.group(
     {
@@ -12,4 +12,4 @@ export const createProductForm = (formBuilder: FormBuilder) => {
       validators: [oldPriceGreaterValidator],
     },
   );
-}
+};

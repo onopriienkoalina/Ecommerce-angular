@@ -8,15 +8,18 @@
       <input id="title" type="text" formControlName="title" />
 
       @if (
-        editProductForm.controls.title.touched && editProductForm.controls.title.errors?.['required']
+        editProductForm.controls.title.touched &&
+        editProductForm.controls.title.errors?.['required']
       ) {
         <p class="product__error">Title is required.</p>
       } @else if (
-        editProductForm.controls.title.touched && editProductForm.controls.title.errors?.['minlength']
+        editProductForm.controls.title.touched &&
+        editProductForm.controls.title.errors?.['minlength']
       ) {
         <p class="product__error">Title must contain at least 2 characters.</p>
       } @else if (
-        editProductForm.controls.title.touched && editProductForm.controls.title.errors?.['maxlength']
+        editProductForm.controls.title.touched &&
+        editProductForm.controls.title.errors?.['maxlength']
       ) {
         <p class="product__error">Title must contain no more than 100 characters.</p>
       }
@@ -79,8 +82,7 @@
         ) {
           <p class="product__error">Old price must be greater than 0.</p>
         } @else if (
-          (editProductForm.controls.price.touched ||
-          editProductForm.controls.oldPrice.touched) &&
+          (editProductForm.controls.price.touched || editProductForm.controls.oldPrice.touched) &&
           editProductForm.errors?.['oldPriceGreater']
         ) {
           <p class="product__error">Old price must be greater than the current price.</p>
@@ -99,24 +101,24 @@
     }
     <div class="product__form-actions">
       <button type="submit" class="product-btn" [disabled]="isSaving() || isDeleting()">
-      @if (isSaving()) {
-        <span class="product__submit-text">Saving product...</span>
-      } @else {
-        <span class="product__submit-text">Save changes</span>
-      }
-    </button>
+        @if (isSaving()) {
+          <span class="product__submit-text">Saving product...</span>
+        } @else {
+          <span class="product__submit-text">Save changes</span>
+        }
+      </button>
       <button
         type="button"
         class="product-btn product-btn--delete"
         [disabled]="isSaving() || isDeleting()"
         (click)="deleteProduct()"
       >
-      @if (isDeleting()) {
-        <span class="product__submit-text">Deleting product...</span>
-      } @else {
-        <span class="product__submit-text">Delete product</span>
-      }
-    </button>
+        @if (isDeleting()) {
+          <span class="product__submit-text">Deleting product...</span>
+        } @else {
+          <span class="product__submit-text">Delete product</span>
+        }
+      </button>
     </div>
   </form>
 </section>

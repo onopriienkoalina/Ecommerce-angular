@@ -47,7 +47,7 @@ export class EditProductPageComponent {
   );
 
   protected async saveProduct(): Promise<void> {
-    if (this.isDeleting()|| this.isSaving()) {
+    if (this.isDeleting() || this.isSaving()) {
       return;
     }
     if (this.editProductForm.invalid) {

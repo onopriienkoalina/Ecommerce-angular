@@ -12,7 +12,13 @@ import {
   deleteDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import type { Product, DiscountTheme, ProductCard, ProductData, UpdateProductData } from './product';
+import type {
+  Product,
+  DiscountTheme,
+  ProductCard,
+  ProductData,
+  UpdateProductData,
+} from './product';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
