@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-main-page',
   imports: [ProductListComponent, RouterLink],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.css',
+  styleUrls: ['./main-page.component.css', '../../shared/styles/product-shared.css'],
 })
 export class MainPageComponent {
   protected readonly productsService = inject(ProductsService);

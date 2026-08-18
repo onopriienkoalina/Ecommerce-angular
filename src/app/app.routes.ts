@@ -16,4 +16,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/add-product/add-product.routes').then((m) => m.addProductRoutes),
   },
+  {
+    path: 'edit-product',
+    loadChildren: () =>
+      import('./features/edit-product/edit-product.routes').then((m) => m.editProductRoutes),
+  },
 ];

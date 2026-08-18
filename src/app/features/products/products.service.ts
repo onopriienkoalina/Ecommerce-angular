@@ -9,8 +9,16 @@ import {
   docData,
   orderBy,
   query,
+  deleteDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
-import type { Product, DiscountTheme, ProductCard, ProductData } from './product';
+import type {
+  Product,
+  DiscountTheme,
+  ProductCard,
+  ProductData,
+  UpdateProductData,
+} from './product';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -91,5 +99,15 @@ export class ProductsService {
       ) + 1;
     const docRef = await addDoc(this.productsCollection, { ...product, sortOrder: nextSortOrder });
     return docRef.id;
+  }
+
+  async updateProduct(id: string, updatedData: UpdateProductData): Promise<void> {
+    const productDocument = doc(this.firestore, 'products', id);
+    await updateDoc(productDocument, updatedData);
+  }
+
+  async deleteProduct(id: string): Promise<void> {
+    const productDocument = doc(this.firestore, 'products', id);
+    await deleteDoc(productDocument);
   }
 }

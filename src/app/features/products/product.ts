@@ -1,4 +1,6 @@
 export type DiscountTheme = 70 | 60 | 50;
+
+export type UpdateProductData = Pick<ProductData, 'title' | 'description' | 'price' | 'oldPrice'>;
 export interface ProductData {
   title: string;
   description: string;

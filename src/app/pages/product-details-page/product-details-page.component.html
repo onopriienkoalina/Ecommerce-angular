@@ -6,12 +6,12 @@
           type="button"
           class="product__details-arrow"
           aria-label="Previous"
-          (click)="showPreviousImage(product.galleryImages)"
+          (click)="showPreviousImage(productImages())"
         >
           <img class="product__details-arrow-icon" src="/slider-arrow-up.svg" alt="Previous" />
         </button>
         <div class="product__details-carousel-images">
-          @for (image of product.galleryImages; track image) {
+          @for (image of productImages(); track $index) {
             <button
               type="button"
               class="product__details-carousel-button"
@@ -31,7 +31,7 @@
           type="button"
           class="product__details-arrow"
           aria-label="Next"
-          (click)="showNextImage(product.galleryImages)"
+          (click)="showNextImage(productImages())"
         >
           <img class="product__details-arrow-icon" src="/slider-arrow-down.svg" alt="Next" />
         </button>
@@ -39,6 +39,11 @@
       <img [src]="currentImage()" [alt]="product.title" class="product__details-img" />
     </div>
     <div class="product__details-info">
+      <a
+        class="product-btn product__details-edit-button"
+        [routerLink]="['/edit-product', product.id]"
+        >Edit Product</a
+      >
       <h1 class="product__details-title">{{ product.title }}</h1>
       <img class="product__details-rating product__rating" [src]="product.rating" alt="rating" />
       <div class="product__details-price-container">

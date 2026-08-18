@@ -1,41 +1,20 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-  ValidationErrors,
-  ValidatorFn,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FileSelectEvent, FileUploadModule, FileRemoveEvent } from 'primeng/fileupload';
 import { ProductsService } from '../../products/products.service';
 import type { ProductData } from '../../products/product';
+import { createProductForm } from '../../products/product-form';
 
 interface ImagePreview {
   file: File;
   previewUrl: string;
 }
-
-const oldPriceGreaterValidator: ValidatorFn = (
-  control: AbstractControl,
-): ValidationErrors | null => {
-  const price = control.get('price')?.value;
-  const oldPrice = control.get('oldPrice')?.value;
-
-  if (typeof price !== 'number' || typeof oldPrice !== 'number') {
-    return null;
-  }
-  if (oldPrice <= price) {
-    return { oldPriceGreater: true };
-  }
-  return null;
-};
 @Component({
   selector: 'app-add-product-page',
   imports: [ReactiveFormsModule, FileUploadModule],
   templateUrl: './add-product-page.component.html',
-  styleUrl: './add-product-page.component.css',
+  styleUrl: '../../../shared/styles/product-shared.css',
 })
 export class AddProductPageComponent {
   private readonly formBuilder = inject(FormBuilder);
@@ -51,18 +30,7 @@ export class AddProductPageComponent {
   protected readonly isSubmitting = signal(false);
   protected readonly submissionError = signal<string | null>(null);
 
-  protected readonly addProductForm = this.formBuilder.nonNullable.group(
-    {
-      title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
-      price: [0, [Validators.required, Validators.min(0.01)]],
-      oldPrice: [0, [Validators.required, Validators.min(0.01)]],
-    },
-    {
-      validators: [oldPriceGreaterValidator],
-    },
-  );
-
+  protected readonly addProductForm = createProductForm(this.formBuilder);
   protected async selectMainImage(event: FileSelectEvent): Promise<void> {
     const file = event.files[0];
 
@@ -141,10 +109,9 @@ export class AddProductPageComponent {
     if (this.isSubmitting()) {
       return;
     }
-    
+
     const mainImage = this.mainImagePreview();
     const galleryImages = this.galleryImagesPreview();
-
 
     if (this.addProductForm.invalid) {
       this.addProductForm.markAllAsTouched();
