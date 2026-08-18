@@ -34,19 +34,24 @@ export class ProductDetailsPageComponent {
       initialValue: undefined,
     },
   );
+  protected readonly productImages = computed(() => {
+    const product = this.product();
+
+    if (!product) {
+      return [];
+    }
+
+    return [product.imageUrl, ...product.galleryImages];
+  });
+
   protected readonly currentImage = computed(() => {
     const product = this.product();
 
     if (!product) {
       return '';
     }
-    const selectedImage = this.selectedImage();
 
-    if (selectedImage && product.galleryImages.includes(selectedImage)) {
-      return selectedImage;
-    }
-
-    return product.galleryImages[0] ?? product.imageUrl;
+    return this.selectedImage() ?? product.imageUrl;
   });
 
   protected selectImage(imageUrl: string): void {

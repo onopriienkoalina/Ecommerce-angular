@@ -1,11 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../products/products.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map, filter, distinctUntilChanged, switchMap, take, tap } from 'rxjs';
+import { map, filter, distinctUntilChanged, switchMap, take, tap, of, catchError } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { createProductForm } from '../../products/product-form';
 import type { UpdateProductData } from '../../products/product';
+import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'app-edit-product-page',
@@ -18,9 +19,12 @@ export class EditProductPageComponent {
   private readonly router = inject(Router);
   private readonly productService = inject(ProductsService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly cartService = inject(CartService);
   protected readonly editProductForm = createProductForm(this.formBuilder);
   protected readonly isSaving = signal(false);
   protected readonly isDeleting = signal(false);
+  protected readonly isLoading = signal(true);
+  protected readonly loadError = signal<string | null>(null);
   protected readonly deleteError = signal<string | null>(null);
   protected readonly saveError = signal<string | null>(null);
   protected readonly product = toSignal(
@@ -28,24 +32,42 @@ export class EditProductPageComponent {
       map((params) => params.get('id')),
       filter((id): id is string => id !== null),
       distinctUntilChanged(),
-      switchMap((id) => this.productService.getProductById(id).pipe(take(1))),
-      tap((product) => {
-        if (!product) {
-          return;
-        }
-        this.editProductForm.patchValue({
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          oldPrice: product.oldPrice,
-        });
+      tap(() => {
+        this.isLoading.set(true);
+        this.loadError.set(null);
       }),
+      switchMap((id) =>
+        this.productService.getProductById(id).pipe(
+          take(1),
+          tap((product) => {
+            this.isLoading.set(false);
+            if (!product) {
+              return;
+            }
+            this.editProductForm.patchValue({
+              title: product.title,
+              description: product.description,
+              price: product.price,
+              oldPrice: product.oldPrice,
+            });
+          }),
+          catchError((error: unknown) => {
+            console.error('Failed to load product:', error);
+            this.isLoading.set(false);
+            this.loadError.set('Failed to load product.');
+            return of(undefined);
+          }),
+        ),
+      ),
     ),
     {
       initialValue: undefined,
     },
   );
 
+  protected readonly isNotFound = computed(
+    () => !this.isLoading() && !this.loadError() && !this.product(),
+  );
   protected async saveProduct(): Promise<void> {
     if (this.isDeleting() || this.isSaving()) {
       return;
@@ -100,6 +122,7 @@ export class EditProductPageComponent {
 
     try {
       await this.productService.deleteProduct(product.id);
+      this.cartService.removeFromCart(product.id);
       void this.router.navigate(['/']);
     } catch (error: unknown) {
       console.error('Failed to delete product:', error);

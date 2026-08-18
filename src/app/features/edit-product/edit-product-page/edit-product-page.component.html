@@ -1,6 +1,15 @@
 <section class="product">
   <h1 class="product__title">Edit product</h1>
 
+  @if (isLoading()) {
+    <p class="product__status" role="status">Loading product...</p>
+  } @else if (loadError()) {
+    <p class="product__error" role="alert">
+      {{ loadError() }}
+    </p>
+  } @else if (isNotFound()) {
+    <p class="product__status" role="status">Product not found.</p>
+  } @else if (product()) {
   <form class="product__form" [formGroup]="editProductForm" (ngSubmit)="saveProduct()" novalidate>
     <div class="product__field">
       <label for="title">Title</label>
@@ -121,4 +130,5 @@
       </button>
     </div>
   </form>
+}
 </section>
