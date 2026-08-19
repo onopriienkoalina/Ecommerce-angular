@@ -5,7 +5,7 @@ import { distinctUntilChanged, map, tap, filter, switchMap } from 'rxjs';
 import { ProductsService } from '../../features/products/products.service';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../features/cart/cart.service';
-
+import { AccessService } from '../../auth/access.service';
 @Component({
   selector: 'app-product-details-page',
   imports: [CurrencyPipe, RouterLink],
@@ -18,6 +18,7 @@ export class ProductDetailsPageComponent {
   protected readonly selectedImage = signal<string | null>(null);
   protected readonly quantity = signal(1);
   private readonly cartService = inject(CartService);
+  protected readonly accessService = inject(AccessService);
 
   protected readonly product = toSignal(
     this.route.paramMap.pipe(
