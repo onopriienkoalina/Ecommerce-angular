@@ -11,7 +11,6 @@ interface StoredCartItem {
   quantity: number;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })

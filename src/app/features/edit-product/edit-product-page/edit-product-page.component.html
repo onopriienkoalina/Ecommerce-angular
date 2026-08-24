@@ -10,125 +10,125 @@
   } @else if (isNotFound()) {
     <p class="product__status" role="status">Product not found.</p>
   } @else if (product()) {
-  <form class="product__form" [formGroup]="editProductForm" (ngSubmit)="saveProduct()" novalidate>
-    <div class="product__field">
-      <label for="title">Title</label>
-
-      <input id="title" type="text" formControlName="title" />
-
-      @if (
-        editProductForm.controls.title.touched &&
-        editProductForm.controls.title.errors?.['required']
-      ) {
-        <p class="product__error">Title is required.</p>
-      } @else if (
-        editProductForm.controls.title.touched &&
-        editProductForm.controls.title.errors?.['minlength']
-      ) {
-        <p class="product__error">Title must contain at least 2 characters.</p>
-      } @else if (
-        editProductForm.controls.title.touched &&
-        editProductForm.controls.title.errors?.['maxlength']
-      ) {
-        <p class="product__error">Title must contain no more than 100 characters.</p>
-      }
-    </div>
-
-    <div class="product__field">
-      <label for="description">Description</label>
-
-      <textarea id="description" rows="6" formControlName="description"></textarea>
-
-      @if (
-        editProductForm.controls.description.touched &&
-        editProductForm.controls.description.errors?.['required']
-      ) {
-        <p class="product__error">Description is required.</p>
-      } @else if (
-        editProductForm.controls.description.touched &&
-        editProductForm.controls.description.errors?.['minlength']
-      ) {
-        <p class="product__error">Description must contain at least 10 characters.</p>
-      } @else if (
-        editProductForm.controls.description.touched &&
-        editProductForm.controls.description.errors?.['maxlength']
-      ) {
-        <p class="product__error">Description must contain no more than 500 characters.</p>
-      }
-    </div>
-
-    <div class="product__prices">
+    <form class="product__form" [formGroup]="editProductForm" (ngSubmit)="saveProduct()" novalidate>
       <div class="product__field">
-        <label for="price">Price</label>
+        <label for="title">Title</label>
 
-        <input id="price" type="number" min="0.01" step="0.01" formControlName="price" />
+        <input id="title" type="text" formControlName="title" />
 
         @if (
-          editProductForm.controls.price.touched &&
-          editProductForm.controls.price.errors?.['required']
+          editProductForm.controls.title.touched &&
+          editProductForm.controls.title.errors?.['required']
         ) {
-          <p class="product__error">Price is required.</p>
+          <p class="product__error">Title is required.</p>
         } @else if (
-          editProductForm.controls.price.touched && editProductForm.controls.price.errors?.['min']
+          editProductForm.controls.title.touched &&
+          editProductForm.controls.title.errors?.['minlength']
         ) {
-          <p class="product__error">Price must be greater than 0.</p>
+          <p class="product__error">Title must contain at least 2 characters.</p>
+        } @else if (
+          editProductForm.controls.title.touched &&
+          editProductForm.controls.title.errors?.['maxlength']
+        ) {
+          <p class="product__error">Title must contain no more than 100 characters.</p>
         }
       </div>
 
       <div class="product__field">
-        <label for="oldPrice">Old price</label>
+        <label for="description">Description</label>
 
-        <input id="oldPrice" type="number" min="0.01" step="0.01" formControlName="oldPrice" />
+        <textarea id="description" rows="6" formControlName="description"></textarea>
 
         @if (
-          editProductForm.controls.oldPrice.touched &&
-          editProductForm.controls.oldPrice.errors?.['required']
+          editProductForm.controls.description.touched &&
+          editProductForm.controls.description.errors?.['required']
         ) {
-          <p class="product__error">Old price is required.</p>
+          <p class="product__error">Description is required.</p>
         } @else if (
-          editProductForm.controls.oldPrice.touched &&
-          editProductForm.controls.oldPrice.errors?.['min']
+          editProductForm.controls.description.touched &&
+          editProductForm.controls.description.errors?.['minlength']
         ) {
-          <p class="product__error">Old price must be greater than 0.</p>
+          <p class="product__error">Description must contain at least 10 characters.</p>
         } @else if (
-          (editProductForm.controls.price.touched || editProductForm.controls.oldPrice.touched) &&
-          editProductForm.errors?.['oldPriceGreater']
+          editProductForm.controls.description.touched &&
+          editProductForm.controls.description.errors?.['maxlength']
         ) {
-          <p class="product__error">Old price must be greater than the current price.</p>
+          <p class="product__error">Description must contain no more than 500 characters.</p>
         }
       </div>
-    </div>
-    @if (saveError(); as error) {
-      <p class="product__error" role="alert">
-        {{ error }}
-      </p>
-    }
-    @if (deleteError(); as error) {
-      <p class="product__error" role="alert">
-        {{ error }}
-      </p>
-    }
-    <div class="product__form-actions">
-      <button type="submit" class="product-btn" [disabled]="isSaving() || isDeleting()">
-        @if (isSaving()) {
-          <span class="product__submit-text">Saving product...</span>
-        } @else {
-          <span class="product__submit-text">Save changes</span>
-        }
-      </button>
-      <button
-        type="button"
-        class="product-btn product-btn--delete"
-        [disabled]="isSaving() || isDeleting()"
-        (click)="deleteProduct()"
-      >
-        @if (isDeleting()) {
-          <span class="product__submit-text">Deleting product...</span>
-        } @else {
-          <span class="product__submit-text">Delete product</span>
-        }
-      </button>
-    </div>
-  </form>
-}
+
+      <div class="product__prices">
+        <div class="product__field">
+          <label for="price">Price</label>
+
+          <input id="price" type="number" min="0.01" step="0.01" formControlName="price" />
+
+          @if (
+            editProductForm.controls.price.touched &&
+            editProductForm.controls.price.errors?.['required']
+          ) {
+            <p class="product__error">Price is required.</p>
+          } @else if (
+            editProductForm.controls.price.touched && editProductForm.controls.price.errors?.['min']
+          ) {
+            <p class="product__error">Price must be greater than 0.</p>
+          }
+        </div>
+
+        <div class="product__field">
+          <label for="oldPrice">Old price</label>
+
+          <input id="oldPrice" type="number" min="0.01" step="0.01" formControlName="oldPrice" />
+
+          @if (
+            editProductForm.controls.oldPrice.touched &&
+            editProductForm.controls.oldPrice.errors?.['required']
+          ) {
+            <p class="product__error">Old price is required.</p>
+          } @else if (
+            editProductForm.controls.oldPrice.touched &&
+            editProductForm.controls.oldPrice.errors?.['min']
+          ) {
+            <p class="product__error">Old price must be greater than 0.</p>
+          } @else if (
+            (editProductForm.controls.price.touched || editProductForm.controls.oldPrice.touched) &&
+            editProductForm.errors?.['oldPriceGreater']
+          ) {
+            <p class="product__error">Old price must be greater than the current price.</p>
+          }
+        </div>
+      </div>
+      @if (saveError(); as error) {
+        <p class="product__error" role="alert">
+          {{ error }}
+        </p>
+      }
+      @if (deleteError(); as error) {
+        <p class="product__error" role="alert">
+          {{ error }}
+        </p>
+      }
+      <div class="product__form-actions">
+        <button type="submit" class="product-btn" [disabled]="isSaving() || isDeleting()">
+          @if (isSaving()) {
+            <span class="product__submit-text">Saving product...</span>
+          } @else {
+            <span class="product__submit-text">Save changes</span>
+          }
+        </button>
+        <button
+          type="button"
+          class="product-btn product-btn--delete"
+          [disabled]="isSaving() || isDeleting()"
+          (click)="deleteProduct()"
+        >
+          @if (isDeleting()) {
+            <span class="product__submit-text">Deleting product...</span>
+          } @else {
+            <span class="product__submit-text">Delete product</span>
+          }
+        </button>
+      </div>
+    </form>
+  }
 </section>
