@@ -7,3 +7,6 @@
   </div>
   <app-product-list [products]="products()" />
 </section>
+@if (isAuthModalOpen()) {
+  <app-auth-modal (closed)="closeAuthModal()" />
+}

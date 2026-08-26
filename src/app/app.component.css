@@ -14,10 +14,18 @@
   align-items: center;
   flex: 1;
 }
-.header__nav-container {
+.header__nav-container,
+.header__buttons-container {
   display: flex;
   align-items: center;
   gap: 32px;
+}
+.header__nav-link {
+  color: #666666;
+}
+
+.header__nav-link:hover {
+  color: #1a1a1a;
 }
 .header__cart {
   position: relative;
@@ -28,7 +36,8 @@
 
   text-decoration: none;
 }
-.header__cart-icon {
+.header__cart-icon,
+.header__user-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
@@ -54,8 +63,60 @@
 .header__cart:hover .header__cart-icon {
   opacity: 0.75;
 }
+.header__user-icon:hover {
+  opacity: 0.75;
+}
 .header__cart:focus-visible {
   outline: 2px solid #00b207;
   outline-offset: 3px;
   border-radius: 4px;
+}
+.header__account {
+  position: relative;
+}
+.header__account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 100;
+
+  min-width: 220px;
+
+  padding: 16px;
+
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.header__account-email {
+  margin: 0 0 12px;
+
+  color: #666666;
+
+  font-size: 14px;
+}
+
+.header__sign-out {
+  width: 100%;
+
+  padding: 10px 16px;
+
+  border: 0;
+  border-radius: 20px;
+
+  background: #00b207;
+  color: #ffffff;
+
+  font: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.header__sign-out:hover {
+  background: #009f06;
 }

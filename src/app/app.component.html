@@ -1,16 +1,46 @@
 <header class="header">
-  <img src="logo.svg" alt="Logo" class="logo" />
   <nav class="header__nav" aria-label="Main navigation">
     <div class="header__nav-container">
       <a class="header__nav-link" routerLink="/">Home</a>
       <a class="header__nav-link" routerLink="/contacts">Contacts</a>
     </div>
-    <a class="header__cart" routerLink="/order">
-      <img src="Bag.svg" alt="" class="header__cart-icon" />
-      @if (cartCount() > 0) {
-        <span class="header__cart-count">{{ cartCount() }}</span>
-      }
-    </a>
+    <img src="logo.svg" alt="Logo" class="logo" />
+    <div class="header__buttons-container">
+      <div class="header__account">
+        @if (isAuthModalOpen()) {
+          <app-auth-modal (closed)="closeAuthModal()" />
+        }
+        <button
+          class="header__user-button"
+          type="button"
+          [disabled]="!authService.isAuthReady()"
+          [attr.aria-label]="authService.isAuthenticated() ? 'Open account menu' : 'Sign in'"
+          [attr.aria-expanded]="authService.isAuthenticated() ? isAccountMenuOpen() : null"
+          (click)="handleAuthClick()"
+        >
+          <img
+            class="header__user-icon"
+            src="user.svg"
+            alt="User account icon to open authentication modal"
+          />
+        </button>
+        @if (authService.isAuthenticated() && isAccountMenuOpen()) {
+          <div class="header__account-menu">
+            <p class="header__account-email">
+              {{ authService.user()?.email }}
+            </p>
+
+            <button class="header__sign-out" type="button" (click)="signOut()">Sign out</button>
+          </div>
+        }
+      </div>
+      <a class="header__cart" routerLink="/order">
+        <img src="Bag.svg" alt="" class="header__cart-icon" />
+        @if (cartCount() > 0) {
+          <span class="header__cart-count">{{ cartCount() }}</span>
+        }
+      </a>
+    </div>
   </nav>
 </header>
 <main class="main">
