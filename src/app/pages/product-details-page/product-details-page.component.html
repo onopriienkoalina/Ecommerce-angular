@@ -8,7 +8,7 @@
           aria-label="Previous"
           (click)="showPreviousImage(productImages())"
         >
-          <img class="product__details-arrow-icon" src="/slider-arrow-up.svg" alt="Previous" />
+          <img class="product__details-arrow-icon" src="slider-arrow-up.svg" alt="Previous" />
         </button>
         <div class="product__details-carousel-images">
           @for (image of productImages(); track $index) {
@@ -33,7 +33,7 @@
           aria-label="Next"
           (click)="showNextImage(productImages())"
         >
-          <img class="product__details-arrow-icon" src="/slider-arrow-down.svg" alt="Next" />
+          <img class="product__details-arrow-icon" src="slider-arrow-down.svg" alt="Next" />
         </button>
       </div>
       <img [src]="currentImage()" [alt]="product.title" class="product__details-img" />
@@ -90,7 +90,7 @@
           Add to Cart
           <img
             class="product__details-add-to-cart-icon"
-            src="/add-to-cart-hover.svg"
+            src="add-to-cart-hover.svg"
             alt="Add to Cart"
           />
         </button>
@@ -98,7 +98,7 @@
           class="product__details-wishlist-button"
           [attr.aria-label]="'Add ' + product.title + ' to wishlist'"
         >
-          <img class="product__details-wishlist-icon" src="/wishlist.svg" alt="Add to Wishlist" />
+          <img class="product__details-wishlist-icon" src="wishlist.svg" alt="Add to Wishlist" />
         </button>
       </div>
     </div>
