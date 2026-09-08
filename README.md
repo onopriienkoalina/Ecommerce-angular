@@ -1,59 +1,82 @@
-# MyApp
+# Ecobazar
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+Ecobazar is a responsive e-commerce web application built with Angular and Firebase.
 
-## Development server
+The project includes product browsing, product details, shopping cart and order functionality, user authentication, registration, role-based access, and protected product management features.
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
+- Product catalog with responsive product cards
+- Product details page with image gallery
+- Shopping cart and order flow
+- Add and edit product functionality
+- Responsive design for desktop, tablet, and mobile
+- Form validation
+- User authentication with:
+  - Email and password
+  - Google
+- User registration
+- Sign out functionality
+- Authentication modal
+- Account menu
+- Role-based authorization
+- Protected routes
+- Firebase Authentication integration
+- Cloud Firestore integration
+- Firestore Security Rules
+
+## User Roles
+
+The application supports three user roles:
+
+- `customer`
+- `admin`
+- `owner`
+
+New users registered through the application are assigned the `customer` role.
+
+Admin and owner accounts are created through a trusted Firebase setup.
+
+Product management actions are available only to authorized roles.
+
+## Authentication
+
+Authentication is implemented using Firebase Authentication.
+
+Supported methods:
+
+- Email/password sign in
+- Email/password registration
+- Google sign in
+
+Firebase authentication state is used as the source of truth for determining whether a user is authenticated.
+
+Authentication and authorization are kept separate:
+
+- `AuthService` handles authentication
+- `AccessService` handles user roles and permissions
+- `UserService` manages Firestore user profiles
+
+## Authorization
+
+User roles are stored in Cloud Firestore:
+
+```text
+users/{uid}
+  role: "customer" | "admin" | "owner"
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Admin functionality
 
-## Code scaffolding
+The application includes role-based functionality for `admin` and `owner`
+users, including product creation, editing, and deletion.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+These routes are protected by Angular route guards and Firestore Security Rules.
 
-```bash
-ng generate component component-name
-```
+Admin credentials are not publicly shared for security reasons.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Admin view
 
-```bash
-ng generate --help
-```
+![Add Product] ()
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+![Edit Product](screenshots/edit-product.png)
