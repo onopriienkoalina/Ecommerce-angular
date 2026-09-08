@@ -6,7 +6,7 @@
     </div>
     <img src="logo.svg" alt="Logo" class="logo" />
     <div class="header__buttons-container">
-      <div class="header__account">
+      <div #account class="header__account">
         @if (isAuthModalOpen()) {
           <app-auth-modal (closed)="closeAuthModal()" />
         }
@@ -34,12 +34,31 @@
           </div>
         }
       </div>
-      <a class="header__cart" routerLink="/order">
-        <img src="Bag.svg" alt="" class="header__cart-icon" />
-        @if (cartCount() > 0) {
-          <span class="header__cart-count">{{ cartCount() }}</span>
+      @if (authService.isAuthReady()) {
+        @if (authService.isAuthenticated()) {
+          <a class="header__cart" routerLink="/order">
+            <img src="Bag.svg" alt="" class="header__cart-icon" />
+            @if (cartCount() > 0) {
+              <span class="header__cart-count">{{ cartCount() }}</span>
+            }
+          </a>
+        } @else {
+          <button
+            class="header__cart header__cart-button"
+            type="button"
+            aria-label="Sign in to open order"
+            (click)="openAuthModal()"
+          >
+            <img src="Bag.svg" alt="" class="header__cart-icon" />
+
+            @if (cartCount() > 0) {
+              <span class="header__cart-count">
+                {{ cartCount() }}
+              </span>
+            }
+          </button>
         }
-      </a>
+      }
     </div>
   </nav>
 </header>

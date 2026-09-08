@@ -120,3 +120,114 @@
 .header__sign-out:hover {
   background: #009f06;
 }
+@media (max-width: 768px) {
+  .header {
+    gap: 24px;
+  }
+
+  .header__logo {
+    width: 150px;
+  }
+
+  .header__nav-container,
+  .header__buttons-container {
+    gap: 20px;
+  }
+
+  .header__nav-link {
+    font-size: 14px;
+  }
+
+  .header__cart,
+  .header__user-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header__cart-icon,
+  .header__user-icon {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    gap: 16px;
+  }
+
+  .header__nav {
+    gap: 16px;
+  }
+
+  .header__logo {
+    width: 135px;
+  }
+
+  .header__nav-container,
+  .header__buttons-container {
+    gap: 14px;
+  }
+
+  .header__nav-link {
+    font-size: 13px;
+  }
+
+  .header__cart,
+  .header__user-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header__cart-icon,
+  .header__user-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .header__cart-count {
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+
+    font-size: 10px;
+  }
+
+  .header__account-menu {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__nav {
+    flex-wrap: wrap;
+  }
+
+  .header__logo {
+    width: 125px;
+  }
+
+  .header__nav-container {
+    gap: 12px;
+  }
+
+  .header__buttons-container {
+    gap: 10px;
+  }
+
+  .header__nav-link {
+    font-size: 12px;
+  }
+
+  .header__account-menu {
+    right: 0;
+
+    width: max-content;
+    min-width: 180px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .header__account-email {
+    overflow-wrap: anywhere;
+  }
+}

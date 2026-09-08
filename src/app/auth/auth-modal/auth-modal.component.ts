@@ -57,7 +57,8 @@ export class AuthModalComponent {
     this.signInError.set(null);
     this.isSigningIn.set(true);
     try {
-      await this.authService.signInWithGoogle();
+      const userCredential = await this.authService.signInWithGoogle();
+      await this.userService.ensureCustomerUser(userCredential.user.uid);
       this.closeModal();
     } catch (error: unknown) {
       console.error('Sign in error:', error);

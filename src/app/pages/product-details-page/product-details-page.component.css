@@ -137,3 +137,154 @@
 .product__details-add-to-cart-icon {
   margin-right: 16px;
 }
+/* Tablet */
+@media (max-width: 1024px) {
+  .product__details {
+    padding: 32px 24px;
+    gap: 20px;
+  }
+
+  .product__details-img {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+  }
+
+  .product__details-title {
+    font-size: 30px;
+  }
+
+  .product__details-add-to-cart {
+    flex: 1;
+    justify-content: center;
+
+    padding: 12px 24px;
+  }
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .product__details {
+    grid-template-columns: 1fr;
+
+    padding: 24px 20px;
+    gap: 32px;
+  }
+
+  .product__details-gallery {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .product__details-img {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+
+    margin: 0 auto;
+  }
+
+  .product__details-carousel {
+    order: 2;
+  }
+
+  .product__details-carousel-images {
+    flex-direction: row;
+    gap: 8px;
+
+    width: 100%;
+    margin: 0;
+
+    overflow-x: auto;
+  }
+
+  .product__details-carousel-button {
+    flex: 0 0 70px;
+    width: 70px;
+    height: 70px;
+  }
+
+  .product__details-title {
+    font-size: 28px;
+  }
+
+  .product__details-price-container {
+    margin-bottom: 28px;
+  }
+
+  .product__details-description {
+    padding-bottom: 28px;
+  }
+
+  .product__details-action {
+    gap: 12px;
+  }
+
+  .product__details-counter {
+    flex-shrink: 0;
+    margin-right: 0;
+  }
+
+  .product__details-add-to-cart {
+    flex: 1;
+    margin-right: 0;
+
+    padding: 12px 20px;
+
+    justify-content: center;
+  }
+}
+
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .product__details {
+    padding: 20px 16px;
+  }
+
+  .product__details-img {
+    max-width: 100%;
+  }
+
+  .product__details-title {
+    font-size: 24px;
+  }
+
+  .product__details-price {
+    font-size: 21px;
+  }
+
+  .product__details-old-price {
+    font-size: 17px;
+  }
+
+  .product__details-description {
+    font-size: 15px;
+  }
+
+  .product__details-action {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .product__details-counter {
+    align-self: flex-start;
+  }
+
+  .product__details-add-to-cart {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 13px 20px;
+
+    justify-content: center;
+  }
+
+  .product__details-edit-button {
+    margin-bottom: 28px;
+  }
+}
