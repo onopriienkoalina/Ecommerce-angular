@@ -77,6 +77,8 @@ Admin credentials are not publicly shared for security reasons.
 
 ### Admin view
 
-![Add Product] (screenshots/add-product-1.png, screenshots/add-product-1.png,)
+![Add Product](screenshots/add-product-1.png)
+
+![Add Product](screenshots/add-product-2.png)
 
 ![Edit Product](screenshots/edit-product.png)
