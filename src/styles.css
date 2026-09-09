@@ -1,4 +1,7 @@
 @import './app/shared/styles/product-shared.css';
+body {
+  background-color: #ffffff;
+}
 *,
 *::before,
 *::after {
